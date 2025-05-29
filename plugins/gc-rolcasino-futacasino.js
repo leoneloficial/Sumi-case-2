@@ -23,23 +23,7 @@ _*[BOT SUMIKA]*_
 • #rob [usuario] - Intentar robar Futacoins a un usuario.
 • #d - Reclama tu recompensa diaria.
 
-_° Mas comandos de Economía/Casino/RPG usando #menu y mira la sección Economy!._
-
-_*[BOT ASAKURA]*_
-• .adventure - Comenzar un adventura.
-• .cazar - Caza algún objeto.
-• .cofre - Abre un cofre.
-• .balance - Ver tu balance.
-• .claim - Reclamar objeto.
-• .work - Trabajar para ganar coins en Asakura.
-• .minar - Mina para obtener diamantes.
-• .minar2 - Mina para obtener experiencia.
-• .buy - Comprar algo en la tienda.
-• .robar [cantidad de coins] [usuario] - Robar a un usuario.
-• .crime - Cometer un crímen.
-• .transfer [coins/diamantes/experiencia] [cantidad de coins/diamantes/experiencia] [usuario] - Transferir a un usuario.
-
-_° Mas comando de Economía usando .menu y mira la sección de Economía!._`;
+_° Mas comandos de Economía/Casino/RPG usando #menu y mira la sección Economy!._`;
 
     // Enviar el mensaje con la info
     await conn.sendMessage(chatId, {
