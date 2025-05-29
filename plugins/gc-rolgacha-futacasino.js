@@ -100,7 +100,7 @@ _*[BOT SUMIKA]*_
   }
 };
 
-handler.command = /^menufcasino(bot)?$/i;
+handler.command = ['gachainfo'];
 handler.tags = ['grupo'];
 handler.help = ['info'];
 handler.group = true;
