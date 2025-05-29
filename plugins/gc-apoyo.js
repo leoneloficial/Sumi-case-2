@@ -1,13 +1,5 @@
 const handler = async (msg, { conn }) => {
   const chatId = msg.key.remoteJid;
-  const isGroup = chatId.endsWith("@g.us");
-
-  if (!isGroup) {
-    await conn.sendMessage(chatId, {
-      text: "❌ Este comando solo puede usarse en grupos."
-    }, { quoted: msg });
-    return;
-  }
 
   // Reacción inicial
   await conn.sendMessage(chatId, {
