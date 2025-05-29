@@ -1,6 +1,4 @@
 //Código creado por https://github.com/GataNina-Li || @gata_dios
-import axios from 'axios'
-import fetch from "node-fetch"
 import uploadFile from '../src/libraries/uploadFile.js'
 import uploadImage from '../src/libraries/uploadImage.js'
 import { webp2png } from '../src/libraries/webp2mp4.js'
