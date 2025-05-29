@@ -1,12 +1,4 @@
 const axios = require('axios');
-const isGroup = chatId.endsWith("@g.us");
-
-  if (!isGroup) {
-    await conn.sendMessage(chatId, {
-      text: "❌ Este comando solo puede usarse en grupos."
-    }, { quoted: msg });
-    return;
-  }
 
 global.futanari = [
   "https://us.rule34.xxx//samples/5221/sample_894a09820f1d582f92352071b2cec687.jpg?6167953",
@@ -534,6 +526,14 @@ global.futanari = [
 
 const handler = async (msg, { conn }) => {
   const chatId = msg.key.remoteJid;
+  const isGroup = chatId.endsWith("@g.us");
+
+  if (!isGroup) {
+    await conn.sendMessage(chatId, {
+      text: "❌ Este comando solo puede usarse en grupos."
+    }, { quoted: msg });
+    return;
+  }
 
   // Reacción inicial
   await conn.sendMessage(chatId, {
