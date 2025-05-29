@@ -532,13 +532,6 @@ const handler = async (msg, { conn }) => {
     react: { text: '🔞', key: msg.key }
   });
 
-  // Verificación del modo NSFW
-  if (!global.db?.data?.chats?.[chatId]?.modohorny && msg.isGroup) {
-    return await conn.sendMessage(chatId, {
-      text: '[ ⚠️ ] Los comandos +18 están desactivados en este grupo. Si eres administrador y deseas activarlos escribe: #enable nsfw'
-    }, { quoted: msg });
-  }
-
   try {
     // Verificación de la existencia de la lista
     if (!global.futanari || global.futanari.length === 0) {
