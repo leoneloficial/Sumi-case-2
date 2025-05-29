@@ -14116,8 +14116,8 @@ case "s":
 
         // 🌟 Formato llamativo para la metadata del sticker 🌟
         let metadata = {
-            packname: `✨ Lo Mandó Hacer: ${senderName} ✨`,
-            author: `🤖 Bot Creador: Azura Ultra & Cortana\n🛠️ Desarrollado por: 𝙍𝙪𝙨𝙨𝙚𝙡𝙡 xz💻\n${fechaCreacion}`
+            packname: `Sticker`,
+            author: `ᴀꜱᴀᴋᴜʀᴀ ᴍᴀᴏ ʙᴏᴛ 👑`
         };
 
         let stickerBuffer;
