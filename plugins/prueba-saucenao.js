@@ -1,90 +1,124 @@
-//Código creado por https://github.com/GataNina-Li || @gata_dios
-let handler = async (m, { conn, args, usedPrefix, command, text }) => {
-try {   
-let url
-let q = m.quoted ? m.quoted : m
-let mime = (q.msg || q).mimetype || q.mediaType || ''
-//const urlRegex = /\.(jpg|jpeg|png)$/i;
-//const pageUrlRegex = /^https?:\/\/[^\s/$.?#].[^\s]*$/i
-//if (pageUrlRegex.test(text) && urlRegex.test(text)) {
-if (text) {
-url = text
-    
-} else if (m.quoted && /image\/(png|jpe?g)/.test(mime) || mime.startsWith('image/')) {
-let media = await q.download()
-url = await uploadImage(media)
-    
-} else if (m.quoted && /image\/webp/.test(mime)) {
-let media = await q.download()
-url = await webp2png(media)
-    
-} else {
-return m.reply('Ingrese un enlace o responda al mensaje con una imagen en formato PNG o JPG o JPEG.')
-}
-const apiKeys = ["45e67c4cbc3d784261ffc83806b5a1d7e3bd09ae", "d3a88baf236200c2ae23f31039e599c252034be8", "a74012c56b54b8d36d2675e12b1a216809c353fe",
-"9812eb9464efa1201c69e5592ba0c74e7edd95e8", "2e7da9f5e70c65f2885b07d48595ba03c4be2ba7", "dafca3c54e59ae1b7fea087ca75984f9e64b74e1"]
-let response;
-let success = false;
-for (let i = 0; i < apiKeys.length; i++) {
-const apiKey = apiKeys[i]
-try {
-response = await axios.get(`https://saucenao.com/search.php?db=999&output_type=2&testmode=1&numres=6&api_key=${apiKey}&url=${encodeURIComponent(url)}`)
-success = true;
-break;
-} catch (error) {
-//console.error(error);
-}}
-if (!success) {
-m.reply("Todas las solicitudes fallaron. No se pudo encontrar una respuesta exitosa.")
-return 
-}
-const results = response.data.results;
-const primerResultado = results[0]
-    
-let resultadoEnBruto = ''
-for (let prop in primerResultado.header) {
-let propName = '';
-switch (prop) {
-case 'similarity': propName = 'Puntuación de similitud' 
-break                              
-case 'author_name': propName = 'Nombre del autor' 
-break      
+const fs = require('fs');
+const axios = require('axios');
+const fetch = require('node-fetch');
+const uploadFile = require('../src/libraries/uploadFile');
+const uploadImage = require('../src/libraries/uploadImage');
+const { webp2png } = require('../src/libraries/webp2mp4');
 
-default:
-propName = prop;  
-}
-resultadoEnBruto += `*${propName}*\n${primerResultado.header[prop]}\n\n`}
-//resultadoEnBruto += ''
-    
-for (let prop in primerResultado.data) {
-let propName = ''
-switch (prop) {
-case 'title': propName = 'Título' 
-break        
-case 'ext_urls': propName = 'URLs' 
-break        
-case 'member_name': propName = 'Nombre del autor' 
-break                
-case 'source': propName = 'Fuente' 
-break                       
-case 'author_name': propName = 'Nombre del Autor' 
-break        
-case 'author_url': propName = 'URL del Autor' 
-break
+const handler = async (msg, { conn, args, usedPrefix, command, text }) => {
+  const chatId = msg.key.remoteJid;
 
-default:
-propName = prop               
-}
-resultadoEnBruto += `*${propName}*\n${primerResultado.data[prop]}\n\n`}
-    
-let twa = {key: {participant: "0@s.whatsapp.net", "remoteJid": "0@s.whatsapp.net"}, "message": {"groupInviteMessage": {"groupJid": "51995386439-1616969743@g.us", "inviteCode": "m", "groupName": "P", "caption": wm, 'jpegThumbnail': await(await fetch(primerResultado.header.thumbnail)).buffer()}}}
-await conn.reply(m.chat, '_*ESPERE UN MOMENTO...*_', twa, m)
-await conn.reply(m.chat, `*◎ R E S U L T A D O*
+  // Reacción inicial
+  await conn.sendMessage(chatId, {
+    react: { text: '🔍', key: msg.key }
+  });
 
-${resultadoEnBruto}`, twa, m)
-} catch (e) {
-await m.reply(lenguajeGB['smsMalError3']() + '\n*' + lenguajeGB.smsMensError1() + '*\n*' + usedPrefix + `${lenguajeGB.lenguaje() == 'es' ? 'reporte' : 'report'}` + '* ' + `${lenguajeGB.smsMensError2()} ` + usedPrefix + command)
-console.log(`❗❗ ${lenguajeGB['smsMensError2']()} ${usedPrefix + command} ❗❗`)
-console.log(e)}
-}
-handler.command = /^sauce|source|salsa|zelda$/i
+  try {
+    let url;
+    const q = msg.quoted ? msg.quoted : msg;
+    const mime = (q.msg || q).mimetype || q.mediaType || '';
+
+    if (text) {
+      url = text;
+    } else if (msg.quoted && /image\/(png|jpe?g)/.test(mime) || mime.startsWith('image/')) {
+      const media = await q.download();
+      url = await uploadImage(media);
+    } else if (msg.quoted && /image\/webp/.test(mime)) {
+      const media = await q.download();
+      url = await webp2png(media);
+    } else {
+      await conn.sendMessage(chatId, {
+        text: '❗ Ingresa un enlace o responde con una imagen PNG, JPG o JPEG.'
+      }, { quoted: msg });
+      return;
+    }
+
+    const apiKeys = [
+      "45e67c4cbc3d784261ffc83806b5a1d7e3bd09ae",
+      "d3a88baf236200c2ae23f31039e599c252034be8",
+      "a74012c56b54b8d36d2675e12b1a216809c353fe",
+      "9812eb9464efa1201c69e5592ba0c74e7edd95e8",
+      "2e7da9f5e70c65f2885b07d48595ba03c4be2ba7",
+      "dafca3c54e59ae1b7fea087ca75984f9e64b74e1"
+    ];
+
+    let response;
+    let success = false;
+
+    for (let i = 0; i < apiKeys.length; i++) {
+      try {
+        response = await axios.get(`https://saucenao.com/search.php?db=999&output_type=2&numres=6&api_key=${apiKeys[i]}&url=${encodeURIComponent(url)}`);
+        success = true;
+        break;
+      } catch (_) {}
+    }
+
+    if (!success) {
+      await conn.sendMessage(chatId, {
+        text: '❌ No se pudo obtener una respuesta exitosa de SauceNAO.'
+      }, { quoted: msg });
+      return;
+    }
+
+    const result = response.data.results[0];
+    let resultadoEnBruto = '';
+
+    for (const prop in result.header) {
+      const label = {
+        similarity: 'Puntuación de similitud',
+        author_name: 'Nombre del autor'
+      }[prop] || prop;
+
+      resultadoEnBruto += `*${label}*\n${result.header[prop]}\n\n`;
+    }
+
+    for (const prop in result.data) {
+      const label = {
+        title: 'Título',
+        ext_urls: 'URLs',
+        member_name: 'Nombre del autor',
+        source: 'Fuente',
+        author_name: 'Nombre del Autor',
+        author_url: 'URL del Autor'
+      }[prop] || prop;
+
+      resultadoEnBruto += `*${label}*\n${result.data[prop]}\n\n`;
+    }
+
+    const thumb = await (await fetch(result.header.thumbnail)).buffer();
+    const mensajePrevia = {
+      key: { participant: "0@s.whatsapp.net", remoteJid: "0@s.whatsapp.net" },
+      message: {
+        groupInviteMessage: {
+          groupJid: "51995386439-1616969743@g.us",
+          inviteCode: "m",
+          groupName: "P",
+          caption: "Resultado de búsqueda",
+          jpegThumbnail: thumb
+        }
+      }
+    };
+
+    await conn.sendMessage(chatId, {
+      text: '_*ESPERE UN MOMENTO...*_'
+    }, { quoted: mensajePrevia });
+
+    await conn.sendMessage(chatId, {
+      text: `*◎ R E S U L T A D O*\n\n${resultadoEnBruto}`
+    }, { quoted: mensajePrevia });
+
+    // Reacción de éxito
+    await conn.sendMessage(chatId, {
+      react: { text: '✅', key: msg.key }
+    });
+
+  } catch (err) {
+    console.error('❌ Error en el comando sauce:', err);
+    await conn.sendMessage(chatId, {
+      text: `❌ Ocurrió un error. Asegúrate de enviar una imagen o URL válida.`
+    }, { quoted: msg });
+  }
+};
+
+handler.command = ['sauce', 'source', 'salsa', 'zelda'];
+module.exports = handler;
