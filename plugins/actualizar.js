@@ -65,7 +65,7 @@ const handler = async (msg, { conn, text }) => {
   }
 };
 
-handler.command = /^(update|actualizar|gitpull)$/i;
+handler.command = ['update', 'actualizar', 'gitpull']; // <- Arreglo aplicado aquí
 handler.rowner = true;
 
 module.exports = handler;
