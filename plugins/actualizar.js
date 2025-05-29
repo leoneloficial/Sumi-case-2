@@ -9,30 +9,30 @@ const handler = async (msg, { conn, text }) => {
     react: { text: '⬇️', key: msg.key }
   });
 
-  const datas = global;
-  const idioma = datas.db.data.users[msg.sender]?.language || global.defaultLenguaje;
-  const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`));
-  const tradutor = _translate.plugins.propietario_actualizar;
-
   try {
-    const stdout = execSync('git pull' + (msg.fromMe && text ? ' ' + text : ''));
-    let messager = stdout.toString();
+    const { db } = global;
+    const idioma = db?.data?.users?.[msg.sender]?.language || global.defaultLenguaje;
+    const _translate = JSON.parse(fs.readFileSync(`./src/languages/${idioma}.json`));
+    const tradutor = _translate.plugins.propietario_actualizar;
 
-    if (messager.includes('Already up to date.')) {
-      messager = tradutor.texto1;
-    } else if (messager.includes('Updating')) {
-      messager = tradutor.texto2 + '\n\n' + stdout.toString();
-    }
-
-    await conn.sendMessage(chatId, { text: messager }, { quoted: msg });
-
-    // Reacción de éxito
-    await conn.sendMessage(chatId, {
-      react: { text: '✅', key: msg.key }
-    });
-
-  } catch {
     try {
+      const stdout = execSync('git pull' + (msg.fromMe && text ? ' ' + text : ''));
+      let messager = stdout.toString();
+
+      if (messager.includes('Already up to date.')) {
+        messager = tradutor.texto1;
+      } else if (messager.includes('Updating')) {
+        messager = tradutor.texto2 + '\n\n' + stdout.toString();
+      }
+
+      await conn.sendMessage(chatId, { text: messager }, { quoted: msg });
+
+      // Reacción de éxito
+      await conn.sendMessage(chatId, {
+        react: { text: '✅', key: msg.key }
+      });
+
+    } catch {
       const status = execSync('git status --porcelain');
       if (status.length > 0) {
         const conflictedFiles = status
@@ -54,18 +54,18 @@ const handler = async (msg, { conn, text }) => {
           await conn.sendMessage(chatId, { text: errorMessage }, { quoted: msg });
         }
       }
-    } catch (error) {
-      console.error(error);
-      let errorMessage2 = tradutor.texto4;
-      if (error.message) {
-        errorMessage2 += '\n*- Mensaje de error:* ' + error.message;
-      }
-      await conn.sendMessage(chatId, { text: errorMessage2 }, { quoted: msg });
     }
+  } catch (error) {
+    console.error(error);
+    let errorMessage2 = '❌ Ocurrió un error al intentar traducir o acceder a la base de datos.';
+    if (error.message) {
+      errorMessage2 += '\n*- Mensaje de error:* ' + error.message;
+    }
+    await conn.sendMessage(chatId, { text: errorMessage2 }, { quoted: msg });
   }
 };
 
-handler.command = ['update', 'actualizar', 'gitpull']; // <- Arreglo aplicado aquí
+handler.command = ['update', 'actualizar', 'gitpull'];
 handler.rowner = true;
 
 module.exports = handler;
