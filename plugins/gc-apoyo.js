@@ -4,7 +4,6 @@ handler.help = ['apoyo']
 handler.tags = ['grupo']
 handler.command = /^(apoyo|mejorar|apoyobot|mejorarbot)$/i
 handler.group = true;
-export default handler
 
 global.apoyo = `*_Aca tienes los 2 bancos para transferir dinero para la mejora del bot!_*
 *Paypal:* colapsuspaypal2005@gmail.com (Benjamin Chacon)
