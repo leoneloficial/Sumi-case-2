@@ -2,6 +2,14 @@ const axios = require('axios');
 
 const handler = async (msg, { conn }) => {
   const chatId = msg.key.remoteJid;
+  const isGroup = chatId.endsWith("@g.us");
+
+  if (!isGroup) {
+    await conn.sendMessage(chatId, {
+      text: "❌ Este comando solo puede usarse en grupos."
+    }, { quoted: msg });
+    return;
+  }
 
   // Asegurar estructura de la base de datos
   global.db = global.db || {};
