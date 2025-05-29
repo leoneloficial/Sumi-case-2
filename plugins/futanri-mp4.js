@@ -3,8 +3,16 @@ const axios = require('axios');
 const handler = async (msg, { conn }) => {
   const chatId = msg.key.remoteJid;
 
+  // Asegurar estructura de la base de datos
+  global.db = global.db || {};
+  global.db.data = global.db.data || {};
+  global.db.data.chats = global.db.data.chats || {};
+  global.db.data.chats[chatId] = global.db.data.chats[chatId] || {};
+
   // Verificar modo +18 si es grupo
-  if (!global.db.data.chats[chatId]?.modohorny && msg.key.participant) {
+  if (
+    msg.key.participant && !global.db.data.chats[chatId].modohorny
+  ) {
     await conn.sendMessage(chatId, {
       text: '[ ⚠️ ] Los comandos +18 están desactivados en este grupo. Si eres administrador y deseas activarlos, escribe #enable nsfw.',
     }, { quoted: msg });
@@ -17,7 +25,7 @@ const handler = async (msg, { conn }) => {
   });
 
   try {
-    // Seleccionar URL aleatoria
+    // Lista de URLs de videos
     const urls = [
       "https://ahri2mp4.rule34.xxx//images/1723/af1aad8933411817279b394f83fe7d5a.mp4?13309285",
       "https://api-cdn-us-mp4.rule34.xxx//images/1723/9d946dfb74b020652d433431e197e081.mp4?13309281",
@@ -34,6 +42,8 @@ const handler = async (msg, { conn }) => {
       "https://api-cdn-us-mp4.rule34.xxx//images/1712/9139abe3be818d95753210c088c4e45c.mp4?13269188",
       "https://api-cdn-us-mp4.rule34.xxx//images/1712/ffdea33d855aed84fa4506acf2672116.mp4?13267494",
     ];
+
+    // Seleccionar URL aleatoria
     const randomUrl = urls[Math.floor(Math.random() * urls.length)];
 
     // Enviar el video
