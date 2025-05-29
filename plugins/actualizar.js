@@ -1,5 +1,5 @@
-import { execSync } from 'child_process';
-import fs from 'fs';
+const { execSync } = require('child_process');
+const fs = require('fs');
 
 const handler = async (msg, { conn, text }) => {
   const chatId = msg.key.remoteJid;
@@ -68,4 +68,4 @@ const handler = async (msg, { conn, text }) => {
 handler.command = /^(update|actualizar|gitpull)$/i;
 handler.rowner = true;
 
-export default handler;
+module.exports = handler;
