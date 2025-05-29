@@ -388,7 +388,7 @@ if (update.action === "add" && welcomeActivo) {
 
     if (customMessage) {
       await sock.sendMessage(update.id, {
-        text: `👋 ${mention}\n\n${customMessage}`,
+        text: `👋| Hola ${mention}\n\n${customMessage}!`,
         mentions: [participant]
       });
     } else {
