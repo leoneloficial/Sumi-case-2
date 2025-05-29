@@ -59,7 +59,7 @@ _° Mas comando de Economía usando .menu y mira la sección de Economía!._`;
   }
 };
 
-handler.command = /^(rolcasino|casinoinfo|infoc)$/i;
+handler.command = ['rolcasino', 'casinoinfo', 'infoc'];
 handler.tags = ['grupo'];
 handler.help = ['rolcasino'];
 handler.group = true;
