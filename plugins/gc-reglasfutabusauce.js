@@ -4,7 +4,6 @@ handler.help = ['reglasfutabusauce']
 handler.tags = ['grupo']
 handler.command = /^(reglasfutabusauce|rulesfutabusauce|reglafutabusauce|rulefutabusauce)$/i
 handler.group = true;
-export default handler
 
 global.reglasfutabusauce = `╰Futabu Sauce╯
 
