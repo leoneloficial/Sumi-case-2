@@ -1,9 +1,9 @@
 const fs = require('fs');
 const axios = require('axios');
 const fetch = require('node-fetch');
-const uploadFile = require('../src/libraries/uploadFile');
-const uploadImage = require('../src/libraries/uploadImage');
-const { webp2png } = require('../src/libraries/webp2mp4');
+const uploadFile = require('../libs/upload');
+const uploadImage = require('../libs/uploadImage');
+const { webp2png } = require('../libs/webp2mp4');
 
 const handler = async (msg, { conn, args, usedPrefix, command, text }) => {
   const chatId = msg.key.remoteJid;
