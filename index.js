@@ -1322,7 +1322,7 @@ try {
 // === FIN BLOQUEO AUTOMÁTICO COMANDOS RPG AZURA ===
 // === INICIO BLOQUEO AUTOMÁTICO COMANDOS +18 (MODO CALIENTE) ===
 try {
-  const comandosHot = ["videoxxx", "pornololi", "nsfwneko", "nsfwwaifu", "waifu", "neko"];
+  const comandosHot = ["videoxxx", "pornololi", "nsfwneko", "nsfwwaifu", "waifu", "neko", "futanari", "futasolo"];
 
   const activosPath = path.resolve("./activos.json");
   const activos = fs.existsSync(activosPath) ? JSON.parse(fs.readFileSync(activosPath)) : {};
