@@ -1,7 +1,7 @@
 const fs = require('fs');
 const axios = require('axios');
 const fetch = require('node-fetch');
-const uploadFile = require('../libs/upload');
+const uploadFile = require('../libs/uploadFile');
 const uploadImage = require('../libs/uploadImage');
 const { webp2png } = require('../libs/webp2mp4');
 
