@@ -8,8 +8,7 @@ const handler = async (msg, { conn }) => {
 
   try {
     // Contenido definido globalmente
-    const contenido = `
-*_✅|CONTENIDO PERMITIDO_*
+    const contenido = `*_✅|CONTENIDO PERMITIDO_*
 ★ Futanari
 ★ Trapos/Femboy's
 ★ Hentai/Furry
