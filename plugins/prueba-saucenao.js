@@ -1,8 +1,4 @@
 //Código creado por https://github.com/GataNina-Li || @gata_dios
-import uploadFile from '../src/libraries/uploadFile.js'
-import uploadImage from '../src/libraries/uploadImage.js'
-import { webp2png } from '../src/libraries/webp2mp4.js'
-import formData from 'form-data'
 let handler = async (m, { conn, args, usedPrefix, command, text }) => {
 try {   
 let url
