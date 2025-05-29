@@ -11,7 +11,7 @@ const handler = async (msg, { conn }) => {
 
 _⚠️| Este grupo será solamente de avisos o noticias relacionada con los grupos de la comunidad Futabu, solo podrán hablar los del Equipo de Staff y los miembros solo podrán ver. Usaremos este grupo ya que facilitará ver más rápido los mensajes, ya que en varios grupos se habla demasiado y se pierden._
 
-Link: https://chat.whatsapp.com/DQvGBkJUBfsClBdrQtk8xw`;
+Link: https://chat.whatsapp.com/GReWJQ0fNNcBvq0SIqGGFf`;
 
     // Enviar mensaje con la info del grupo de comunidad
     await conn.sendMessage(chatId, {
