@@ -1,5 +1,4 @@
 //Código creado por https://github.com/GataNina-Li || @gata_dios
-import fs from 'fs'
 import axios from 'axios'
 import fetch from "node-fetch"
 import uploadFile from '../src/libraries/uploadFile.js'
