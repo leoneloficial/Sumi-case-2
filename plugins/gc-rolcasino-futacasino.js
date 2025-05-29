@@ -4,7 +4,6 @@ handler.help = ['rolcasino']
 handler.tags = ['grupo']
 handler.command = /^(rolcasino|casinoinfo|infoc)$/i
 handler.group = true;
-export default handler
 
 global.rolcasino = `🎰|Comandos Casino/RPG/Economia:
 
