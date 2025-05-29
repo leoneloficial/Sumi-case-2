@@ -9,16 +9,6 @@ const handler = async (msg, { conn }) => {
   global.db.data.chats = global.db.data.chats || {};
   global.db.data.chats[chatId] = global.db.data.chats[chatId] || {};
 
-  // Verificar modo +18 si es grupo
-  if (
-    msg.key.participant && !global.db.data.chats[chatId].modohorny
-  ) {
-    await conn.sendMessage(chatId, {
-      text: '[ ⚠️ ] Los comandos +18 están desactivados en este grupo. Si eres administrador y deseas activarlos, escribe #enable nsfw.',
-    }, { quoted: msg });
-    return;
-  }
-
   // Reacción inicial
   await conn.sendMessage(chatId, {
     react: { text: '🔞', key: msg.key }
