@@ -1,4 +1,4 @@
-const { generateWAMessageFromContent } = require("baileys");
+/*const { generateWAMessageFromContent } = require("baileys");
 const fs = require('fs');
 
 const handler = async (msg, { conn, text, participants }) => {
@@ -93,7 +93,7 @@ const handler = async (msg, { conn, text, participants }) => {
       }, { quoted: msg });
     }
   }
-};
+};*/
 
 handler.command = ['hidetag', 'notificar', 'notify'];
 handler.group = true;
