@@ -1,5 +1,5 @@
-import { generateWAMessageFromContent } from "baileys";
-import * as fs from 'fs';
+const { generateWAMessageFromContent } = require("baileys");
+const fs = require('fs');
 
 const handler = async (msg, { conn, text, participants }) => {
   const chatId = msg.key.remoteJid;
@@ -100,4 +100,4 @@ handler.group = true;
 handler.admin = true;
 handler.reaction = '📢';
 
-export default handler;
+module.exports = handler;
