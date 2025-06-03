@@ -93,11 +93,11 @@ const handler = async (msg, { conn, text, participants }) => {
       }, { quoted: msg });
     }
   }
-};*/
+};
 
 handler.command = ['hidetag', 'notificar', 'notify'];
 handler.group = true;
 handler.admin = true;
 handler.reaction = '📢';
 
-module.exports = handler;
+module.exports = handler;*/
