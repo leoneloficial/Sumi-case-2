@@ -281,7 +281,7 @@ case 'play': {
 
     const info = `
 ╔═════════════════╗
-║✦ 𝘼𝙕𝙐𝙍𝘼 𝙐𝗹𝗍𝗋𝗮 & 𝘾𝙤𝙧𝙩𝙖𝙣𝙖 ✦
+║✦ 𝘼𝙕𝙐𝙍𝘼 𝙐𝗹𝗍𝗋𝗮 ✦
 ╚═════════════════╝
 📀 *𝙄𝗻𝗳𝗼 𝗱𝗲𝗹 𝘃𝗶𝗱𝗲𝗼:*  
 ╭───────────────╮  
@@ -296,7 +296,7 @@ case 'play': {
 ┣ 🎥 *Video:* _${global.prefix}play6 boza hoy_
 ┗ ⚠️ *¿No se reproduce?* Usa _${global.prefix}ff_
 ═════════════════════  
-   𖥔 Azura Ultra & Cortana 𖥔
+   𖥔 Azura Ultra 𖥔
 ═════════════════════
 ✳️ *Para descargar desde este mensaje:*
 • Responde con *1* o *audio* para recibir la música.
@@ -356,7 +356,7 @@ case 'play2': {
 
     const info = `
 ╔═════════════════╗
-║✦ 𝘼𝙕𝙐𝙍𝘼 𝙐𝗹𝗍𝗋𝗮 & 𝘾𝙤𝙧𝙩𝙖𝙣𝙖 ✦
+║✦ 𝘼𝙕𝙐𝙍𝘼 𝙐𝗹𝗍𝗋𝗮 ✦
 ╚═════════════════╝
 📀 *𝙄𝗻𝗳𝗼 𝗱𝗲𝗹 𝘃𝗶𝗱𝗲𝗼:*  
 ╭───────────────╮  
@@ -371,7 +371,7 @@ case 'play2': {
 ┣ 🎥 *Video:* _${global.prefix}play6 boza hoy_
 ┗ ⚠️ *¿No se reproduce?* Usa _${global.prefix}ff_
 ═════════════════════  
-   𖥔 Azura Ultra & Cortana 𖥔
+   𖥔 Azura Ultra  𖥔
 ═════════════════════
 ✳️ *Para descargar desde este mensaje:*
 • Responde con *1* o *audio* para recibir la música.
@@ -450,7 +450,7 @@ ${global.prefix}guar → Guarda archivos con una clave.
 ${global.prefix}g → Recupera archivos guardados.  
 ${global.prefix}kill → Elimina un archivo guardado.  
 
-💡 *Azura Ultra & Cortana sigue mejorando. Pronto más funciones.*  
+💡 *Azura Ultra sigue mejorando. Pronto más funciones.*  
 ⚙️ *Desarrollado por Russell xz* 🚀`;
 
         // Enviar el menú con video como GIF
@@ -544,13 +544,13 @@ case 'pack2': {
 }
 break;
       
-
 case "modoadmins": {
   try {
-    const senderNumber = (msg.key.participant || msg.key.remoteJid).replace(/[@:\-s.whatsapp.net]/g, "");
-    const isBotMessage = msg.key.fromMe;
     const chatId = msg.key.remoteJid;
     const isGroup = chatId.endsWith("@g.us");
+    const senderId = msg.key.participant || msg.key.remoteJid;
+    const senderNum = senderId.replace(/[^0-9]/g, "");
+    const isBotMessage = msg.key.fromMe;
 
     if (!isGroup) {
       await sock.sendMessage(chatId, {
@@ -559,11 +559,15 @@ case "modoadmins": {
       break;
     }
 
+    // Obtener metadata del grupo
     const metadata = await sock.groupMetadata(chatId);
-    const participant = metadata.participants.find(p => p.id.includes(senderNumber));
-    const isAdmin = participant?.admin === "admin" || participant?.admin === "superadmin";
 
-    if (!isAdmin && !isOwner(senderNumber) && !isBotMessage) {
+    // Buscar el participante exacto (ya sea @lid o número real)
+    const participant = metadata.participants.find(p => p.id === senderId);
+    const isAdmin = participant?.admin === "admin" || participant?.admin === "superadmin";
+    const isOwner = global.owner.some(([id]) => id === senderNum);
+
+    if (!isAdmin && !isOwner && !isBotMessage) {
       await sock.sendMessage(chatId, {
         text: "❌ Solo administradores o el owner pueden usar este comando."
       }, { quoted: msg });
@@ -609,6 +613,7 @@ case "modoadmins": {
   }
   break;
 }
+
       
 case "modoprivado": {
   try {
@@ -1236,147 +1241,7 @@ case 'carga': {
   });
   break;
 }
-      
-    
-case 'play222': {
-    const axios = require('axios');
-    const fs = require('fs');
-    const path = require('path');
-    const { pipeline } = require('stream');
-    const { promisify } = require('util');
-    const streamPipeline = promisify(pipeline);
-
-    if (!text) {
-        await sock.sendMessage(msg.key.remoteJid, {
-            text: `✳️ Usa el comando correctamente:\n\n📌 Ejemplo: *${global.prefix}play2* La Factoría - Perdoname`
-        }, { quoted: msg });
-        break;
-    }
-
-    await sock.sendMessage(msg.key.remoteJid, {
-        react: { text: '⏳', key: msg.key }
-    });
-
-    try {
-        // 1. BUSQUEDA: Usamos el título para buscar el video
-        const searchUrl = `https://api.neoxr.eu/api/video?q=${encodeURIComponent(text)}&apikey=russellxz`;
-        const searchRes = await axios.get(searchUrl);
-        const videoInfo = searchRes.data;
-        if (!videoInfo || !videoInfo.data?.url) 
-            throw new Error('No se pudo encontrar el video');
-
-        const title = videoInfo.title || 'video';
-        const thumbnail = videoInfo.thumbnail;
-        const duration = videoInfo.fduration || '0:00';
-        const views = videoInfo.views || 'N/A';
-        const author = videoInfo.channel || 'Desconocido';
-        const videoLink = `https://www.youtube.com/watch?v=${videoInfo.id}`;
-
-        // 2. BANNER: Enviamos la vista previa con la info
-        const captionPreview = `
-╔═════════════════╗
-║✦ 𝘼𝙕𝙐𝙍𝘼 𝙐𝗹𝗍𝗋𝗮 & 𝘾𝙤𝙧𝙩𝙖𝙣𝙖 ✦
-╚═════════════════╝
-
-📀 *𝙄𝗻𝗳𝗼 𝗱𝗲𝗹 𝘃𝗶𝗱𝗲𝗼:*  
-╭───────────────╮  
-├ 🎼 *Título:* ${title}
-├ ⏱️ *Duración:* ${duration}
-├ 👁️ *Vistas:* ${views}
-├ 👤 *Autor:* ${author}
-└ 🔗 *Link:* ${videoLink}
-╰───────────────╯
-
-📥 *Opciones de Descarga:*  
-┣ 🎵 *Audio:* _${global.prefix}play1 ${text}_
-┣ 🎵 *Audio:* _${global.prefix}play5 ${text}_
-┣ 🎥 *Video:* _${global.prefix}play2 ${text}_
-┣ 🎥 *Video:* _${global.prefix}play6 ${text}_
-┗ ⚠️ *¿No se reproduce?* Usa _${global.prefix}ff_
-
-⏳ *Procesado por Azura Ultra & Cortana Bot*
-═════════════════════  
-   𖥔 Azura Ultra & Cortana 𖥔
-═════════════════════`;
         
-        await sock.sendMessage(msg.key.remoteJid, {
-            image: { url: thumbnail },
-            caption: captionPreview
-        }, { quoted: msg });
-
-        // 3. DESCARGA: Usamos la lógica de ytmp4 para descargar el video
-        const qualities = ['720p', '480p', '360p'];
-        let videoData = null;
-        for (let quality of qualities) {
-            try {
-                const apiUrl = `https://api.neoxr.eu/api/youtube?url=${encodeURIComponent(videoLink)}&apikey=russellxz&type=video&quality=${quality}`;
-                const response = await axios.get(apiUrl);
-                if (response.data?.status && response.data?.data?.url) {
-                    videoData = {
-                        url: response.data.data.url,
-                        title: response.data.title || title,
-                        thumbnail: response.data.thumbnail || thumbnail,
-                        duration: response.data.fduration || duration,
-                        views: response.data.views || views,
-                        channel: response.data.channel || author,
-                        quality: response.data.data.quality || quality,
-                        size: response.data.data.size || 'Desconocido',
-                        publish: response.data.publish || 'Desconocido',
-                        id: response.data.id || videoInfo.id
-                    };
-                    break;
-                }
-            } catch { continue; }
-        }
-        if (!videoData) throw new Error('No se pudo obtener el video en ninguna calidad');
-
-        const tmpDir = path.join(__dirname, 'tmp');
-        if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir);
-        const filename = `${Date.now()}_video.mp4`;
-        const filePath = path.join(tmpDir, filename);
-
-        const resDownload = await axios.get(videoData.url, {
-            responseType: 'stream',
-            headers: { 'User-Agent': 'Mozilla/5.0' }
-        });
-        await streamPipeline(resDownload.data, fs.createWriteStream(filePath));
-
-        const stats = fs.statSync(filePath);
-        if (!stats || stats.size < 100000) {
-            fs.unlinkSync(filePath);
-            throw new Error('El video descargado está vacío o incompleto');
-        }
-
-        const finalText = `🎬 Aquí tiene su video.\n\nDisfrútelo y continúe explorando el mundo digital.\n\n© Azura Ultra & Cortana`;
-
-        await sock.sendMessage(msg.key.remoteJid, {
-            video: fs.readFileSync(filePath),
-            mimetype: 'video/mp4',
-            fileName: `${videoData.title}.mp4`,
-            caption: finalText,
-            gifPlayback: false
-        }, { quoted: msg });
-
-        fs.unlinkSync(filePath);
-
-        await sock.sendMessage(msg.key.remoteJid, {
-            react: { text: '✅', key: msg.key }
-        });
-
-    } catch (err) {
-        console.error(err);
-        await sock.sendMessage(msg.key.remoteJid, {
-            text: `❌ *Error:* ${err.message}`
-        }, { quoted: msg });
-        await sock.sendMessage(msg.key.remoteJid, {
-            react: { text: '❌', key: msg.key }
-        });
-    }
-
-    break;
-}
-        
-  
       
 case 'whatmusic': {
     const fs = require('fs');
@@ -2030,122 +1895,6 @@ case "git": {
     break;
 }
 
-        
-case 'play11': {
-    const axios = require('axios');
-    const yts = require('yt-search');
-    const fs = require('fs');
-    const path = require('path');
-    const ffmpeg = require('fluent-ffmpeg');
-    const { pipeline } = require('stream');
-    const { promisify } = require('util');
-    const streamPipeline = promisify(pipeline);
-
-    if (!text) {
-        await sock.sendMessage(msg.key.remoteJid, {
-            text: `✳️ Usa el comando correctamente:\n\n📌 Ejemplo: *${global.prefix}play* bad bunny diles`
-        }, { quoted: msg });
-        break;
-    }
-
-    await sock.sendMessage(msg.key.remoteJid, {
-        react: { text: '⏳', key: msg.key }
-    });
-
-    try {
-        const search = await yts(text);
-        const video = search.videos[0];
-        if (!video) throw new Error('No se encontraron resultados');
-
-        const videoUrl = video.url;
-        const thumbnail = video.thumbnail;
-        const title = video.title;
-        const fduration = video.timestamp;
-        const views = video.views.toLocaleString();
-        const channel = video.author.name || 'Desconocido';
-
-        const infoMessage = `
-╔══════════════════╗
-║  ✦ 𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼 & 𝘾𝙊𝙍𝙏𝘼𝙉𝘼 ✦
-╚══════════════════╝
-
-📀 *𝙄𝙣𝙛𝙤 𝙙𝙚𝙡 𝙖𝙪𝙙𝙞𝙤:*  
-╭───────────────╮  
-├ 🎼 *Título:* ${title}
-├ ⏱️ *Duración:* ${fduration}
-├ 👁️ *Vistas:* ${views}
-├ 👤 *Autor:* ${channel}
-└ 🔗 *Enlace:* ${videoUrl}
-╰───────────────╯
-
-📥 *Opciones de Descarga:*  
-┣ 🎵 *Audio:* _${global.prefix}play1 ${text}_
-┣ 🎵 *Audio:* _${global.prefix}play5 ${text}_
-┣ 🎥 *video:* _${global.prefix}play2 ${text}_
-┗ 🎥 *Video:* _${global.prefix}play6 ${text}_
-
-⏳ *Espera un momento...*  
-⚙️ *Azura Ultra & Cortana está procesando tu música...*
-═══════════════════  
-     𖥔 Azura Ultra & Cortana 𖥔`;
-
-        await sock.sendMessage(msg.key.remoteJid, {
-            image: { url: thumbnail },
-            caption: infoMessage
-        }, { quoted: msg });
-
-        // Descargar el audio desde la API
-        const apiURL = `https://api.neoxr.eu/api/youtube?url=${encodeURIComponent(videoUrl)}&type=audio&quality=128kbps&apikey=russellxz`;
-        const res = await axios.get(apiURL);
-        const json = res.data;
-
-        if (!json.status || !json.data?.url) throw new Error("No se pudo obtener el audio");
-
-        const tmpDir = path.join(__dirname, 'tmp');
-        if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir);
-
-        const rawPath = path.join(tmpDir, `${Date.now()}_raw.m4a`);
-        const finalPath = path.join(tmpDir, `${Date.now()}_final.mp3`);
-
-        const audioRes = await axios.get(json.data.url, { responseType: 'stream' });
-        await streamPipeline(audioRes.data, fs.createWriteStream(rawPath));
-
-        // Convertir con FFmpeg
-        await new Promise((resolve, reject) => {
-            ffmpeg(rawPath)
-                .audioCodec('libmp3lame')
-                .audioBitrate('128k')
-                .format('mp3')
-                .save(finalPath)
-                .on('end', resolve)
-                .on('error', reject);
-        });
-
-        await sock.sendMessage(msg.key.remoteJid, {
-            audio: fs.readFileSync(finalPath),
-            mimetype: 'audio/mpeg',
-            fileName: `${title}.mp3`
-        }, { quoted: msg });
-
-        fs.unlinkSync(rawPath);
-        fs.unlinkSync(finalPath);
-
-        await sock.sendMessage(msg.key.remoteJid, {
-            react: { text: '✅', key: msg.key }
-        });
-
-    } catch (err) {
-        console.error(err);
-        await sock.sendMessage(msg.key.remoteJid, {
-            text: `❌ *Error:* ${err.message}`
-        }, { quoted: msg });
-        await sock.sendMessage(msg.key.remoteJid, {
-            react: { text: '❌', key: msg.key }
-        });
-    }
-
-    break;
-}
 
 case 'ytmp4': {
     const axios = require('axios');
@@ -2192,7 +1941,7 @@ case 'ytmp4': {
             } catch { continue; }
         }
 
-        if (!videoData) throw new Error('No se pudo obtener el video en ninguna calidad');
+        if (!videoData) throw new Error('No se pudo obtener el video en ninguna calidad Talvez excede el límite de 99MB');
 
         const tmpDir = path.join(__dirname, 'tmp');
         if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir);
@@ -2231,7 +1980,7 @@ case 'ytmp4': {
 ╰───────────────╯
 ┗ ⚠️ *¿No se reproduce?* Usa _${global.prefix}ff_
 
-⏳ *Procesado por Azura Ultra & Cortana*`;
+⏳ *Procesado por Azura Ultra*`;
 
         await sock.sendMessage(msg.key.remoteJid, {
             video: fs.readFileSync(filePath),
@@ -2259,6 +2008,7 @@ case 'ytmp4': {
 
     break;
 }
+
       
       
       case 'tiktoksearch': {
@@ -2373,9 +2123,7 @@ case 'ytmp3': {
   const fs = require('fs');
   const path = require('path');
   const ffmpeg = require('fluent-ffmpeg');
-  const { promisify } = require('util');
-  const { pipeline } = require('stream');
-  const streamPipeline = promisify(pipeline);
+  const { PassThrough } = require('stream');
 
   const isYoutubeUrl = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|music\.youtube\.com)\//i.test(text);
 
@@ -2396,48 +2144,54 @@ case 'ytmp3': {
     const json = res.data;
 
     if (!json.status || !json.data?.url) {
-      console.log('Respuesta de la API:', JSON.stringify(json, null, 2));
       throw new Error("No se pudo obtener el audio");
     }
 
     const { data, title, fduration, thumbnail } = json;
+    const sizeMBFromApi = parseFloat(data.size);
+
+    if (sizeMBFromApi > 99) {
+      return await sock.sendMessage(msg.key.remoteJid, {
+        text: `❌ El audio pesa ${sizeMBFromApi.toFixed(2)}MB y excede el límite de 99MB.\n\n🔒 Solo se permiten descargas menores a 99MB para no saturar los servidores.`
+      }, { quoted: msg });
+    }
 
     await sock.sendMessage(msg.key.remoteJid, {
       image: { url: thumbnail },
-      caption: `🎧 *Título:* ${title}\n🕒 *Duración:* ${fduration}\n📥 *Tamaño:* ${data.size}\n\n⏳ Descargando audio...`
+      caption: `🎧 *Título:* ${title}\n🕒 *Duración:* ${fduration}\n📥 *Tamaño:* ${sizeMBFromApi.toFixed(2)}MB\n\n⏳ Procesando audio...`
     }, { quoted: msg });
 
-    const tmpDir = path.join(__dirname, 'tmp');
-    if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir);
+    const response = await axios.get(data.url, { responseType: 'stream' });
+    const streamInput = new PassThrough();
+    const buffers = [];
 
-    const rawPath = path.join(tmpDir, `${Date.now()}_raw.m4a`);
-    const finalPath = path.join(tmpDir, `${Date.now()}_final.mp3`);
+    // Procesar el stream con ffmpeg
+    ffmpeg(response.data)
+      .audioCodec('libmp3lame')
+      .audioBitrate('128k')
+      .format('mp3')
+      .on('error', err => {
+        console.error(err);
+        sock.sendMessage(msg.key.remoteJid, {
+          text: `❌ Error procesando audio Talvez excede el límite de 99MB: ${err.message}`
+        }, { quoted: msg });
+      })
+      .on('end', async () => {
+        const finalBuffer = Buffer.concat(buffers);
+        await sock.sendMessage(msg.key.remoteJid, {
+          audio: finalBuffer,
+          mimetype: 'audio/mpeg',
+          fileName: `${title}.mp3`
+        }, { quoted: msg });
 
-    const audioRes = await axios.get(data.url, { responseType: 'stream' });
-    await streamPipeline(audioRes.data, fs.createWriteStream(rawPath));
+        await sock.sendMessage(msg.key.remoteJid, {
+          react: { text: '✅', key: msg.key }
+        });
+      })
+      .pipe(streamInput);
 
-    // Convertir con FFmpeg
-    await new Promise((resolve, reject) => {
-      ffmpeg(rawPath)
-        .audioCodec('libmp3lame')
-        .audioBitrate('128k')
-        .save(finalPath)
-        .on('end', resolve)
-        .on('error', reject);
-    });
-
-    await sock.sendMessage(msg.key.remoteJid, {
-      audio: fs.readFileSync(finalPath),
-      mimetype: 'audio/mpeg',
-      fileName: data.filename || `${title}.mp3`
-    }, { quoted: msg });
-
-    fs.unlinkSync(rawPath);
-    fs.unlinkSync(finalPath);
-
-    await sock.sendMessage(msg.key.remoteJid, {
-      react: { text: '✅', key: msg.key }
-    });
+    // Acumular chunks en buffer para enviar sin archivo
+    streamInput.on('data', chunk => buffers.push(chunk));
 
   } catch (err) {
     console.error(err);
@@ -2488,7 +2242,7 @@ case 'play3': {
 ⧁ 𝙋𝙊𝙋𝙐𝙇𝘼𝙍𝙄𝘿𝘼𝘿: ${result.popularity}
 ⧁ 𝙀𝙉𝙇𝘼𝘾𝙀: ${url}
 
-🎶 *Azura Ultra & Cortana esta enviando tu música...*`.trim();
+🎶 *Azura Ultra  esta enviando tu música...*`.trim();
 
         await sock.sendMessage(msg.key.remoteJid, {
             image: { url: img },
@@ -2622,7 +2376,7 @@ case 'play5': {
 
         const infoMessage = `
 ╔══════════════════╗
-║  ✦ 𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼 & 𝘾𝙊𝙍𝙏𝘼𝙉𝘼 ✦   
+║  ✦ 𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼 BOT 2.0 ✦   
 ╚══════════════════╝
 
 📀 *𝙄𝙣𝙛𝙤 𝙙𝙚𝙡 𝙫𝙞𝙙𝙚𝙤:*  
@@ -2644,7 +2398,7 @@ case 'play5': {
 ⚙️ *Azura Ultra 2.0 está procesando tu música...*
 
 ═════════════════════  
-         𖥔 𝗔𝘇𝘂𝗋𝗮 𝗨𝗹𝘁𝗋𝗮 & 𝘾𝙤𝙧𝙩𝙖𝙣𝙖 𖥔
+     𖥔 𝗔𝘇𝘂𝗋𝗮 𝗨𝗹𝘁𝗋𝗮 2.0 BOT 𖥔
 ═════════════════════`;
 
         await sock.sendMessage(msg.key.remoteJid, {
@@ -2694,7 +2448,7 @@ case 'play5': {
     } catch (err) {
         console.error(err);
         await sock.sendMessage(msg.key.remoteJid, {
-            text: `❌ *Error:* ${err.message}`
+            text: `❌ *Error Talvez excede el límite de 99MB:* ${err.message}`
         }, { quoted: msg });
 
         await sock.sendMessage(msg.key.remoteJid, {
@@ -2801,7 +2555,7 @@ case 'play6': {
 
         const infoMessage = `
 ╔══════════════════╗
-║✦ 𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼 & 𝘾𝙊𝙍𝙏𝘼𝙉𝘼  ✦   ║
+║✦ 𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼 2.0 BOT  ✦   
 ╚══════════════════╝
 
 📀 *𝙄𝙣𝙛𝙤 𝙙𝙚𝙡 𝙫𝙞𝙙𝙚𝙤:*  
@@ -2823,7 +2577,7 @@ case 'play6': {
 ⚙️ *Azura Ultra 2.0 está procesando tu video...*
 
 ═════════════════════  
-         𖥔 𝗔𝘇𝘂𝗋𝗮 𝗨𝗹𝘁𝗋𝗮 & 𝘾𝙊𝙍𝙏𝘼𝙉𝘼 𖥔
+     𖥔 𝗔𝘇𝘂𝗋𝗮 𝗨𝗹𝘁𝗋𝗮 2.0 BOT𖥔
 ═════════════════════`;
 
         await sock.sendMessage(msg.key.remoteJid, {
@@ -2894,7 +2648,7 @@ Disfrútelo y continúe explorando el mundo digital.
     } catch (err) {
         console.error(err);
         await sock.sendMessage(msg.key.remoteJid, {
-            text: `❌ *Error:* ${err.message}`
+            text: `❌ *Error Talvez excede el límite de 99MB:* ${err.message}`
         }, { quoted: msg });
         await sock.sendMessage(msg.key.remoteJid, {
             react: { text: '❌', key: msg.key }
@@ -3018,7 +2772,7 @@ case 'play1': {
     } catch (error) {
         console.error(error);
         await sock.sendMessage(msg.key.remoteJid, {
-            text: "⚠️ Hubo un pequeño error :("
+            text: "⚠️ Hubo un pequeño error Talvez excede el límite de 99MB:("
         }, { quoted: msg });
     }
 
@@ -4111,9 +3865,9 @@ case 'allmenu': {
         let totalComandos = commands.length;
 
         // Construir menú
-        let commandList = `╔════════════════════╗  
-║  𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼 & 𝘾𝙊𝙍𝙏𝘼𝙉𝘼  ║  
-╚════════════════════╝  
+        let commandList = `╔════════════════╗  
+║  𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼 ALL MENU            
+╚═════════════════╝  
         📜 *Menú Completo*  
 ━━━━━━━━━━━━━━━━━━━  
 📌 𝗧𝗢𝗧𝗔𝗟 𝗗𝗘 𝗖𝗢𝗠𝗔𝗡𝗗𝗢𝗦: ${totalComandos}  
@@ -4128,15 +3882,15 @@ case 'allmenu': {
 
         commandList += `━━━━━━━━━━━━━━━━━━━  
 👨‍💻 𝘿𝙚𝙨𝙖𝙧𝙧𝙤𝙡𝙡𝙖𝙙𝙤 𝙥𝙤𝙧 𝙍𝙪𝙨𝙨𝙚𝙡𝙡 𝙓𝙕  
-╭────────────────╮  
-│ 𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼 & 𝘾𝙊𝙍𝙏𝘼𝙉𝘼 │  
-╰────────────────╯`;
+╭─────────────╮  
+│    𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼    
+╰─────────────╯`;
 
         // Enviar usando sendMessage2
         await sock.sendMessage2(
   chatId,
   {
-    image: { url: "https://cdn.dorratz.com/files/1744666819010.jpg" }, 
+    image: { url: "https://cdn.russellxz.click/9bd11d81.jpeg" }, 
     caption: commandList 
   },
   msg 
@@ -4158,9 +3912,9 @@ case 'menuowner': {
     });
 
     const chatId = msg.key.remoteJid;
-    const captionText = `╔═══════════════╗  
-║     𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼 & 𝘾𝙊𝙍𝙏𝘼𝙉𝘼    ║  
-╚═══════════════╝  
+    const captionText = `╔═══════════╗  
+║    𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼      
+╚═══════════╝  
 
             𝐌𝐄𝐍𝐔 𝐎𝐖𝐍𝐄𝐑  
 ━━━━━━━━━━━━━━━━━━━━  
@@ -4196,17 +3950,17 @@ case 'menuowner': {
 
       𝗗𝗲𝘀𝗮𝗿𝗿𝗼𝗹𝗹𝗮𝗱𝗼 𝗽𝗼𝗿: ʳᵘˢˢᵉˡˡ ˣᶻ  
 
-         𝙖𝙯𝙪𝙧𝙖 𝙪𝙡𝙩𝙧𝙖 & 𝘾𝙤𝙧𝙩𝙖𝙣𝙖`;
+         𝙖𝙯𝙪𝙧𝙖 𝙪𝙡𝙩𝙧𝙖`;
 
     const videoResponse = await axios.get(
-      "https://cdn.dorratz.com/files/1741471185939.mp4",
+      "https://cdn.russellxz.click/83229a2d.jpeg",
       { responseType: 'arraybuffer' }
     );
 
 await sock.sendMessage2(
   chatId,
   {
-    image: { url: "https://cdn.dorratz.com/files/1744667309694.jpg" }, 
+    image: { url: "https://cdn.russellxz.click/83229a2d.jpeg" }, 
     caption: captionText 
   },
   msg 
@@ -4230,7 +3984,7 @@ case 'menurpg': {
 
     const chatId = msg.key.remoteJid;
     const menuText = `╔═════════════════╗  
-║   𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼 & 𝘾𝙊𝙍𝙏𝘼𝙉𝘼 ║  
+║  𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼 MENU RPG       
 ╚═════════════════╝  
 
 ✦ 𝐁𝐈𝐄𝐍𝐕𝐄𝐍𝐈𝐃𝐎 𝐀𝐋 𝐌𝐄𝐍𝐔 𝐑𝐏𝐆 ✦  
@@ -4289,17 +4043,17 @@ Así te registras
 ━━━━━━━━━━━━━━━━━━  
 𝗗𝗘𝗦𝗔𝗥𝗥𝗢𝗟𝗟𝗔𝗗𝗢 𝗣𝗢𝗥: russell xz  
 
-╭────────────────╮  
-│ 𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼 & 𝘾𝙊𝙍𝙏𝘼𝙉𝘼 │  
-╰────────────────╯`;
+╭────────────╮  
+│ 𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼          
+╰────────────╯`;
 
-    const videoUrl = "https://cdn.dorratz.com/files/1741474416069.mp4";
+    const videoUrl = "https://cdn.russellxz.click/0abb8549.jpeg";
     const videoBuffer = (await axios.get(videoUrl, { responseType: 'arraybuffer' })).data;
 
 await sock.sendMessage2(
   chatId,
   {
-    image: { url: "https://cdn.dorratz.com/files/1744667713683.jpg" }, 
+    image: { url: "https://cdn.russellxz.click/0abb8549.jpeg" }, 
     caption: menuText
   },
   msg 
@@ -4323,10 +4077,10 @@ case 'menu': {
     });
 
     const chatId = msg.key.remoteJid;
-    const captionText = `╔═══════════════╗  
-║ 𝐀𝐙𝐔𝐑𝐀 𝐔𝐋𝐓𝐑𝐀 & 𝐂𝐎𝐑𝐓𝐀𝐍𝐀  ║  
-║   🤖 𝘼𝙎𝙄𝙎𝙏𝙀𝙉𝙏𝙀 🤖   ║  
-╚═══════════════╝  
+    const captionText = `╔═════════════╗  
+║ 𝐀𝐙𝐔𝐑𝐀 𝐔𝐋𝐓𝐑𝐀  
+║   🤖 𝘼𝙎𝙄𝙎𝙏𝙀𝙉𝙏𝙀 🤖     
+╚═════════════╝  
 
 ╭──────────────╮  
 │ ✦ 𝙈𝙀𝙉𝙐 𝙂𝙀𝙉𝙀𝙍𝘼𝙇 ✦ │  
@@ -4363,6 +4117,7 @@ case 'menu': {
 ⎔ ${global.prefix}menurpg  
 ⎔ ${global.prefix}info  
 ⎔ ${global.prefix}menuowner  
+⎔ ${global.prefix}menufree
 
 ╭──────────────╮  
 │ ✦ PARA VENTAS ✦ │  
@@ -4486,7 +4241,7 @@ case 'menu': {
 ⎔ ${global.prefix}Neko
 
 ╭─────────────────╮  
- ✦ 𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼 & 𝘾𝙊𝙍𝙏𝘼𝙉𝘼 𝙀𝙎𝙏Á 𝙀𝙉 𝘾𝙊𝙉𝙎𝙏𝘼𝙉𝙏𝙀 𝘿𝙀𝙎𝘼𝙍𝙍𝙊𝙇𝙇𝙊. 
+ ✦ 𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼 𝙀𝙎𝙏Á 𝙀𝙉 𝘾𝙊𝙉𝙎𝙏𝘼𝙉𝙏𝙀 𝘿𝙀𝙎𝘼𝙍𝙍𝙊𝙇𝙇𝙊. 
   𝙎𝙀 𝘼𝙂𝙍𝙀𝙂𝘼𝙍Á𝙉 𝙈Á𝙎 𝙁𝙐𝙉𝘾𝙄𝙊𝙉𝙀𝙎 𝙋𝙍𝙊𝙉𝙏𝙊.   
 ╰─────────────────╯  
 
@@ -4496,7 +4251,7 @@ case 'menu': {
     await sock.sendMessage2(
   chatId,
   {
-    image: { url: "https://cdn.dorratz.com/files/1744672917987.jpg" }, 
+    image: { url: "https://cdn.russellxz.click/752ef2f1.jpeg" }, 
     caption: captionText 
   },
   msg 
@@ -4519,10 +4274,10 @@ case 'menugrupo': {
     });
 
     const chatId = msg.key.remoteJid;
-    const captionText = `╔══════════════════╗  
-║  𝐀𝐙𝐔𝐑𝐀 𝐔𝐋𝐓𝐑𝐀 &  𝐂𝐎𝐑𝐓𝐀𝐍𝐀   ║  
-║   🎭 𝙼𝙴𝙽𝚄 𝙳𝙴 𝙶ℝ𝚄𝙿𝙾 🎭   ║  
-╚══════════════════╝  
+    const captionText = `╔════════════════╗  
+║  𝐀𝐙𝐔𝐑𝐀 𝐔𝐋𝐓𝐑𝐀             
+║   🎭 𝙼𝙴𝙽𝚄 𝙳𝙴 𝙶ℝ𝚄𝙿𝙾 🎭    
+╚════════════════╝  
 
 🛠 𝐂𝐎𝐍𝐅𝐈𝐆𝐔𝐑𝐀𝐂𝐈Ó𝐍  
 ╭✦ ${global.prefix}setinfo  
@@ -4573,16 +4328,16 @@ case 'menugrupo': {
 
 📌 𝐌Á𝐒 𝐂𝐎𝐌𝐀𝐍𝐃𝐎𝐒 𝐏𝐑Ó𝐗𝐈𝐌𝐀𝐌𝐄𝐍𝐓𝐄...
 
-⟢ 𝐀𝐙𝐔𝐑𝐀 𝐔𝐋𝐓𝐑𝐀 & 𝐂𝐎𝐑𝐓𝐀𝐍𝐀 ⟣`;
+⟢ 𝐀𝐙𝐔𝐑𝐀 𝐔𝐋𝐓𝐑𝐀 ⟣`;
 
-    const videoResponse = await axios.get("https://cdn.dorratz.com/files/1741471817068.mp4", { 
+    const videoResponse = await axios.get("https://cdn.russellxz.click/c113150e.jpeg", { 
       responseType: 'arraybuffer' 
     });
 
     await sock.sendMessage2(
   chatId,
   {
-    image: { url: "https://cdn.dorratz.com/files/1744666186448.jpg" }, 
+    image: { url: "https://cdn.russellxz.click/c113150e.jpeg" }, 
     caption: captionText 
   },
   msg
@@ -5380,7 +5135,7 @@ case 'todos': {
     const extraMsg = args.join(" ");
 
     let finalMsg = "━〔 *📢 INVOCACIÓN 📢* 〕━➫\n";
-    finalMsg += "٩(͡๏̯͡๏)۶ Por Azura Ultra & Cortana ٩(͡๏̯͡๏)۶\n";
+    finalMsg += "٩(͡๏̯͡๏)۶ Por Azura Ultra ٩(͡๏̯͡๏)۶\n";
     if (extraMsg.trim().length > 0) {
       finalMsg += `\n❑ Mensaje: ${extraMsg}\n\n`;
     } else {
@@ -11380,7 +11135,7 @@ case 'verdad': {
 
         await sock.sendMessage(msg.key.remoteJid, {
             image: { url: 'https://cdn.dorratz.com/files/1740781671173.jpg' },
-            caption: `𝘏𝘢𝘴 𝘦𝘴𝘤𝘰𝘨𝘪𝘥𝘰 *𝘝𝘌𝘙𝘋𝘈𝘋*\n\n╱╲❀╱╲╱╲❀╱╲╱╲❀╱╲\n◆ ${verdad}\n╲╱❀╲╱╲╱❀╲╱╲╱❀╲╱\n\n© Azura Ultra & Cortana`
+            caption: `𝘏𝘢𝘴 𝘦𝘴𝘤𝘰𝘨𝘪𝘥𝘰 *𝘝𝘌𝘙𝘋𝘈𝘋*\n\n╱╲❀╱╲╱╲❀╱╲╱╲❀╱╲\n◆ ${verdad}\n╲╱❀╲╱╲╱❀╲╱╲╱❀╲╱\n\n© Azura Ultra`
         }, { quoted: msg });
 
         // ✅ Reacción de éxito
@@ -11412,7 +11167,7 @@ case 'reto': {
 
         await sock.sendMessage(msg.key.remoteJid, {
             image: { url: 'https://cdn.dorratz.com/files/1740781675920.jpg' },
-            caption: `𝘏𝘢𝘴 𝘦𝘴𝘤𝘰𝘨𝘪𝘥𝘰 *𝘙𝘌𝘛𝘖*\n\n╱╲❀╱╲╱╲❀╱╲╱╲❀╱╲\n◆ ${reto}\n╲╱❀╲╱╲╱❀╲╱╲╱❀╲╱\n\n© Azura Ultra & Cortana`
+            caption: `𝘏𝘢𝘴 𝘦𝘴𝘤𝘰𝘨𝘪𝘥𝘰 *𝘙𝘌𝘛𝘖*\n\n╱╲❀╱╲╱╲❀╱╲╱╲❀╱╲\n◆ ${reto}\n╲╱❀╲╱╲╱❀╲╱╲╱❀╲╱\n\n© Azura Ultra`
         }, { quoted: msg });
 
     } catch (e) {
@@ -11494,7 +11249,7 @@ case 'memes': {
 
         await sock.sendMessage(msg.key.remoteJid, {
             image: { url: meme },
-            caption: "🤣 *¡Aquí tienes un meme!*\n\n© Azura Ultra & Cortana"
+            caption: "🤣 *¡Aquí tienes un meme!*\n\n© Azura Ultra"
         }, { quoted: msg });
 
     } catch (e) {
@@ -11743,7 +11498,7 @@ case 'ia': {
         const respuestaGPT4 = data.data.message;
 
         await sock.sendMessage(msg.key.remoteJid, { 
-            text: `✨ *GPT-4 responde a @${userId.replace("@s.whatsapp.net", "")}:*\n\n${respuestaGPT4}\n\n🔹 *Powered by Azura Ultra & Cortana* 🤖`,
+            text: `✨ *GPT-4 responde a @${userId.replace("@s.whatsapp.net", "")}:*\n\n${respuestaGPT4}\n\n🔹 *Powered by Azura Ultra* 🤖`,
             mentions: [userId] 
         }, { quoted: msg });
 
@@ -14116,6 +13871,7 @@ case "s":
 
         // 🌟 Formato llamativo para la metadata del sticker 🌟
         let metadata = {
+
             packname: `Sticker`,
             author: `ᴀꜱᴀᴋᴜʀᴀ ᴍᴀᴏ ʙᴏᴛ 👑`
         };
@@ -14417,7 +14173,7 @@ case 'info':
       react: { text: "ℹ️", key: msg.key }
     });
 
-    const infoMessage = `╭─ *🤖 AZURA ULTRA &  CORTANA* ─╮
+    const infoMessage = `╭─ *🤖 AZURA ULTRA* ─╮
 │ 🔹 *Prefijo actual:* ${global.prefix}
 │ 👑 *Dueño:* Russell xz
 │ 🛠️ *Bot desarrollado desde cero* con la ayuda de Chatgpt.
@@ -14434,7 +14190,7 @@ case 'info':
 ├─〔 📜 *Menús y Comandos* 〕─
 │ 📌 Usa *${global.prefix}menu* para ver los comandos principales.  
 │ 📌 Usa *${global.prefix}allmenu* para ver todos los comandos disponibles.  
-│ 📌 Usa *${global.prefix}menu2* para ver los comandos de multimedia y guardado.  
+│ 📌 Usa *${global.prefix}menuaudio* para ver los comandos de multimedia y guardado.  
 ╰──────────────────╯`;
 
     await sock.sendMessage2(msg.key.remoteJid,
@@ -15293,6 +15049,9 @@ case "ig":
         });
 
         const axios = require('axios');
+        const fs = require('fs');
+        const path = require('path');
+
         const apiUrl = `https://api.dorratz.com/igdl?url=${text}`;
         const response = await axios.get(apiUrl);
         const { data } = response.data;
@@ -15304,14 +15063,43 @@ case "ig":
         }
 
         // 📜 Construcción del mensaje con marca de agua
-        const caption = `🎬 *Video de Instagram*\n\n> 🍧Solicitud procesada por api.dorratz.com\n\n───────\n© Azura Ultra & Cortana`;
+        const caption = `🎬 *Video de Instagram*\n\n> 🍧Solicitud procesada por api.dorratz.com\n\n───────\n© Azura Ultra`;
 
-        // 📩 Enviar cada video descargado con la marca de agua
+        // Asegurar carpeta tmp
+        const tmpDir = path.resolve('./tmp');
+        if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir);
+
+        // 📩 Descargar y enviar cada video
         for (let item of data) {
+            const filePath = path.join(tmpDir, `ig-${Date.now()}-${Math.floor(Math.random() * 1000)}.mp4`);
+
+            const videoRes = await axios.get(item.url, { responseType: 'stream' });
+            const writer = fs.createWriteStream(filePath);
+
+            await new Promise((resolve, reject) => {
+                videoRes.data.pipe(writer);
+                writer.on("finish", resolve);
+                writer.on("error", reject);
+            });
+
+            const stats = fs.statSync(filePath);
+            const sizeMB = stats.size / (1024 * 1024);
+
+            if (sizeMB > 99) {
+                fs.unlinkSync(filePath);
+                await sock.sendMessage(msg.key.remoteJid, {
+                    text: `❌ Un video pesa ${sizeMB.toFixed(2)}MB y excede el límite de 99MB.\n\n🔒 No se puede enviar para no saturar los servidores.`
+                }, { quoted: msg });
+                continue;
+            }
+
             await sock.sendMessage(msg.key.remoteJid, { 
-                video: { url: item.url }, 
+                video: fs.readFileSync(filePath), 
+                mimetype: 'video/mp4',
                 caption: caption 
             }, { quoted: msg });
+
+            fs.unlinkSync(filePath);
         }
 
         // ✅ Confirmación con reacción de éxito
@@ -15326,7 +15114,7 @@ case "ig":
         }, { quoted: msg });
     }
     break;
-        
+
 case "tiktok":
 case "tt":
     if (!text) {
@@ -15348,6 +15136,8 @@ case "tt":
         });
 
         const axios = require('axios');
+        const fs = require('fs');
+        const path = require('path');
         const response = await axios.get(`https://api.dorratz.com/v2/tiktok-dl?url=${args[0]}`);
 
         if (!response.data || !response.data.data || !response.data.data.media) {
@@ -15362,22 +15152,47 @@ case "tt":
         const videoLikes = videoData.like || "0";
         const videoComments = videoData.comment || "0";
 
+        // Asegurar carpeta ./tmp
+        const tmpDir = path.resolve('./tmp');
+        if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir);
+        const filePath = path.join(tmpDir, `tt-${Date.now()}.mp4`);
+
+        // Descargar y guardar
+        const videoRes = await axios.get(videoUrl, { responseType: 'stream' });
+        const writer = fs.createWriteStream(filePath);
+        await new Promise((resolve, reject) => {
+            videoRes.data.pipe(writer);
+            writer.on("finish", resolve);
+            writer.on("error", reject);
+        });
+
+        // Verificar tamaño
+        const stats = fs.statSync(filePath);
+        const sizeMB = stats.size / (1024 * 1024);
+        if (sizeMB > 99) {
+            fs.unlinkSync(filePath);
+            return sock.sendMessage(msg.key.remoteJid, {
+                text: `❌ El archivo pesa ${sizeMB.toFixed(2)}MB y excede el límite de 99MB.\n\n🔒 Solo se permiten descargas menores a 99MB para no saturar los servidores.`
+            }, { quoted: msg });
+        }
+
         // 📜 Mensaje con la información del video
         let mensaje = `🎥 *Video de TikTok* 🎥\n\n`;
         mensaje += `📌 *Título:* ${videoTitle}\n`;
         mensaje += `👤 *Autor:* ${videoAuthor}\n`;
         mensaje += `⏱️ *Duración:* ${videoDuration}\n`;
         mensaje += `❤️ *Likes:* ${videoLikes} | 💬 *Comentarios:* ${videoComments}\n\n`;
-        
-        // 📢 Agregar la API utilizada y marca de agua con buen formato
         mensaje += `───────\n🍧 *API utilizada:* https://api.dorratz.com\n`;
-        mensaje += `© Azura Ultra & Cortana`;
+        mensaje += `© Azura Ultra`;
 
-        // 📩 Enviar el video con la información
+        // 📩 Enviar video
         await sock.sendMessage(msg.key.remoteJid, {
-            video: { url: videoUrl },
+            video: fs.readFileSync(filePath),
+            mimetype: 'video/mp4',
             caption: mensaje
         }, { quoted: msg });
+
+        fs.unlinkSync(filePath); // eliminar temporal
 
         // ✅ Reacción de éxito
         await sock.sendMessage(msg.key.remoteJid, { 
@@ -15395,8 +15210,11 @@ case "tt":
             react: { text: "❌", key: msg.key } 
         });
     }
-    break;
+    break;        
+
         
+
+
 case "facebook":
 case "fb":
     if (!text) return sock.sendMessage(msg.key.remoteJid, { 
@@ -15416,21 +15234,53 @@ case "fb":
         });
 
         const axios = require('axios');
+        const fs = require('fs');
+        const path = require('path');
         const response = await axios.get(`https://api.dorratz.com/fbvideo?url=${encodeURIComponent(text)}`);
         const results = response.data;
 
-        if (!results || results.length === 0) {
+        if (!results || results.length === 0 || !results[0].url) {
             return sock.sendMessage(msg.key.remoteJid, { text: "❌ No se pudo obtener el video." });
         }
 
-        // 📜 Construcción del mensaje con resoluciones disponibles
-        const message = `Resoluciones disponibles:\n${results.map((res) => `- ${res.resolution}`).join('\n')}\n\n🔥 Enviado en 720p\n\n> 🍧 Solicitud procesada por api.dorratz.com\n\n───────\n© Azura Ultra & Cortana`;
+        // Asegurar carpeta tmp
+        const tmpDir = path.resolve('./tmp');
+        if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir);
 
-        // 📩 Enviar el video con la marca de agua
+        const videoUrl = results[0].url;
+        const filePath = path.join(tmpDir, `fb-${Date.now()}.mp4`);
+
+        // Descargar y guardar
+        const videoRes = await axios.get(videoUrl, { responseType: 'stream' });
+        const writer = fs.createWriteStream(filePath);
+
+        await new Promise((resolve, reject) => {
+            videoRes.data.pipe(writer);
+            writer.on("finish", resolve);
+            writer.on("error", reject);
+        });
+
+        const stats = fs.statSync(filePath);
+        const sizeMB = stats.size / (1024 * 1024);
+
+        if (sizeMB > 99) {
+            fs.unlinkSync(filePath);
+            return sock.sendMessage(msg.key.remoteJid, {
+                text: `❌ El archivo pesa ${sizeMB.toFixed(2)}MB y excede el límite de 99MB.\n\n🔒 Solo se permiten descargas menores a 99MB para no saturar los servidores.`
+            }, { quoted: msg });
+        }
+
+        // 📜 Construcción del mensaje con resoluciones disponibles
+        const message = `Resoluciones disponibles:\n${results.map((res) => `- ${res.resolution}`).join('\n')}\n\n🔥 Enviado en 720p\n\n> 🍧 Solicitud procesada por api.dorratz.com\n\n───────\n© Azura Ultra`;
+
+        // 📩 Enviar el video como normal
         await sock.sendMessage(msg.key.remoteJid, {
-            video: { url: results[0].url }, // Se envía en 720p por defecto
+            video: fs.readFileSync(filePath),
+            mimetype: 'video/mp4',
             caption: message
         }, { quoted: msg });
+
+        fs.unlinkSync(filePath);
 
         // ✅ Confirmación con reacción de éxito
         await sock.sendMessage(msg.key.remoteJid, { 
@@ -15446,6 +15296,8 @@ case "fb":
     break;
     }
 }
+        
+
 
 module.exports = { handleCommand };
 

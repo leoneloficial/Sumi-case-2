@@ -1,6 +1,6 @@
 (async () => {
 let canalId = ["120363266665814365@newsletter"];  
-let canalNombre = ["AZURA ULTRA CHANNEL 👾"]
+let canalNombre = ["👾 AZURA ULTRA CHANNEL 👾"]
   function setupConnection(conn) {
   conn.sendMessage2 = async (chat, content, m, options = {}) => {
     const firstChannel = { 
@@ -222,6 +222,25 @@ setInterval(async () => {
                 }
             }
 
+// Ruta de los archivos a limpiar
+const archivosAntidelete = ['./antidelete.json', './antideletepri.json'];
+
+function limpiarAntidelete() {
+  for (const archivo of archivosAntidelete) {
+    if (fs.existsSync(archivo)) {
+      fs.writeFileSync(archivo, JSON.stringify({}, null, 2));
+      console.log(`🧹 Archivo limpiado: ${archivo}`);
+    }
+  }
+}
+
+// Ejecutar limpieza cada 30 minutos
+setInterval(limpiarAntidelete, 30 * 60 * 1000); // 30 min
+
+// Ejecutar una vez al inicio
+limpiarAntidelete();
+//cada 30 minutos antidelete          
+          
 // Función para revisar y actualizar grupos cada 5 segundos
 setInterval(async () => {
   try {
@@ -642,7 +661,7 @@ try {
         [docMode ? 'document' : 'video']: fs.readFileSync(filePath),
         mimetype: 'video/mp4',
         fileName: `${data.title}.mp4`,
-        caption: docMode ? undefined : `🎬 Aquí tiene su video.\n\nDisfrútelo y continúe explorando el mundo digital.\n\n© Azura Ultra & Cortana`
+        caption: docMode ? undefined : `🎬 Aquí tiene su video.\n\nDisfrútelo y continúe explorando el mundo digital.\n\n© Azura Ultra`
       }, { quoted: msg });
 
       fs.unlinkSync(filePath);
@@ -991,165 +1010,6 @@ try {
   console.error("❌ Error en contador de mensajes:", error);
 }
 // === FIN CONTADOR DE MENSAJES POR GRUPO ===
-// === INICIO BLOQUEO DE MENSAJES DE USUARIOS MUTEADOS ===
-try {
-  const chatId = msg.key.remoteJid;
-  const isGroup = chatId.endsWith("@g.us");
-
-  if (isGroup) {
-    const senderId = msg.key.participant || msg.key.remoteJid;
-    const mutePath = "./mute.json";
-    const muteData = fs.existsSync(mutePath) ? JSON.parse(fs.readFileSync(mutePath)) : {};
-    const muteList = muteData[chatId] || [];
-
-    if (muteList.includes(senderId)) {
-      global._muteCounter = global._muteCounter || {};
-      const key = `${chatId}:${senderId}`;
-      global._muteCounter[key] = (global._muteCounter[key] || 0) + 1;
-
-      const count = global._muteCounter[key];
-
-      if (count === 8) {
-        await sock.sendMessage(chatId, {
-          text: `⚠️ @${senderId.split("@")[0]} estás muteado.\nSigue enviando mensajes y podrías ser eliminado.`,
-          mentions: [senderId]
-        });
-      }
-
-      if (count === 13) {
-        await sock.sendMessage(chatId, {
-          text: `⛔ @${senderId.split("@")[0]} estás al límite.\nSi envías *otro mensaje*, serás eliminado del grupo.`,
-          mentions: [senderId]
-        });
-      }
-
-      if (count >= 15) {
-        const metadata = await sock.groupMetadata(chatId);
-        const user = metadata.participants.find(p => p.id === senderId);
-        const isAdmin = user?.admin === 'admin' || user?.admin === 'superadmin';
-
-        if (!isAdmin) {
-          await sock.groupParticipantsUpdate(chatId, [senderId], "remove");
-          await sock.sendMessage(chatId, {
-            text: `❌ @${senderId.split("@")[0]} fue eliminado por ignorar el mute.`,
-            mentions: [senderId]
-          });
-          delete global._muteCounter[key];
-        } else {
-          await sock.sendMessage(chatId, {
-            text: `🔇 @${senderId.split("@")[0]} es administrador y no se puede eliminar.`,
-            mentions: [senderId]
-          });
-        }
-      }
-
-      // eliminar mensaje
-      await sock.sendMessage(chatId, {
-        delete: {
-          remoteJid: chatId,
-          fromMe: false,
-          id: msg.key.id,
-          participant: senderId
-        }
-      });
-
-      return; // este return es interno, no afecta el resto
-    }
-  }
-} catch (err) {
-  console.error("❌ Error en lógica de muteo:", err);
-}
-// === FIN BLOQUEO DE MENSAJES DE USUARIOS MUTEADOS ===
-    
-// === INICIO BLOQUEO DE COMANDOS A USUARIOS BANEADOS ===
-try {
-  const banPath = path.resolve("./ban.json");
-  const banData = fs.existsSync(banPath) ? JSON.parse(fs.readFileSync(banPath)) : {};
-
-  const messageText = msg.message?.conversation || msg.message?.extendedTextMessage?.text || "";
-  if (!messageText.startsWith(global.prefix)) return;
-
-  const commandOnly = messageText.slice(global.prefix.length).trim().split(" ")[0].toLowerCase();
-
-  const senderId = msg.key.participant || msg.key.remoteJid;
-  const senderClean = senderId.replace(/[^0-9]/g, "");
-  const senderLID = senderId; // ejemplo: 123456789012345@lid
-  const senderClassic = `${senderClean}@s.whatsapp.net`; // ejemplo: 521234567890@...
-
-  const isFromMe = msg.key.fromMe;
-  const isOwner = global.owner.some(([id]) => id === senderClean);
-
-  const groupBanList = banData[chatId] || [];
-
-  if ((groupBanList.includes(senderClassic) || groupBanList.includes(senderLID)) && !isOwner && !isFromMe) {
-    const frases = [
-      "🚫 @usuario estás baneado por pendejo. ¡Abusaste demasiado del bot!",
-      "❌ Lo siento @usuario, pero tú ya no puedes usarme. Aprende a comportarte.",
-      "🔒 No tienes permiso @usuario. Fuiste baneado por molestar mucho.",
-      "👎 ¡Bloqueado! @usuario abusaste del sistema y ahora no puedes usarme.",
-      "😤 Quisiste usarme pero estás baneado, @usuario. Vuelve en otra vida."
-    ];
-
-    const texto = frases[Math.floor(Math.random() * frases.length)].replace("@usuario", `@${senderClean}`);
-
-    await sock.sendMessage(chatId, {
-      text: texto,
-      mentions: [senderId]
-    }, { quoted: msg });
-
-    return;
-  }
-} catch (e) {
-  console.error("❌ Error procesando bloqueo de usuarios baneados:", e);
-}
-// === FIN BLOQUEO DE COMANDOS A USUARIOS BANEADOS ===
-    
-
-  // 🔐 Modo Privado activado
-    if (activos.modoPrivado) {
-      if (isGroup) {
-        if (!fromMe && !isOwner(sender)) return;
-      } else {
-        if (!fromMe && !isOwner(sender) && !isAllowedUser(sender)) return;
-      }
-    } else {
-      // 🎯 Modo Admins por grupo
-      if (isGroup && activos.modoAdmins?.[chatId]) {
-        try {
-          const metadata = await sock.groupMetadata(chatId);
-          const participant = metadata.participants.find(p => p.id.includes(sender));
-          const isAdmin = participant?.admin === "admin" || participant?.admin === "superadmin";
-          if (!isAdmin && !isOwner(sender) && !fromMe) return;
-        } catch (e) {
-          console.error("Error leyendo metadata:", e);
-          return;
-        }
-      }
-
-      
-
-      // 🔒 En privado si no es de la lista, no responde
-      if (!isGroup && !fromMe && !isOwner(sender) && !isAllowedUser(sender)) return;
-    }
-// === INICIO BLOQUEO DE COMANDOS SI EL BOT ESTÁ APAGADO EN EL GRUPO ===
-try {
-  const activosPath = "./activos.json";
-  const activos = fs.existsSync(activosPath)
-    ? JSON.parse(fs.readFileSync(activosPath, "utf-8"))
-    : {};
-
-  const isApagado = activos.apagado?.[chatId] === true;
-  const senderClean = sender.replace(/[^0-9]/g, "");
-  const isOwner = global.owner.some(([id]) => id === senderClean);
-
-  if (isGroup && isApagado && !isOwner) {
-    return; // Ignora comandos de usuarios comunes si el bot está apagado
-  }
-} catch (e) {
-  console.error("❌ Error en lógica de bloqueo por apagado:", e);
-}
-// === FIN BLOQUEO DE COMANDOS SI EL BOT ESTÁ APAGADO EN EL GRUPO ===
-    
 // === INICIO LÓGICA COMANDOS DESDE STICKER ===
 try {
   const jsonPath = "./comandos.json";
@@ -1225,6 +1085,163 @@ try {
   console.error("❌ Error al ejecutar comando desde sticker:", err);
 }
 // === FIN LÓGICA COMANDOS DESDE STICKER ===       
+    
+// === INICIO BLOQUEO DE MENSAJES DE USUARIOS MUTEADOS ===
+try {
+  const chatId = msg.key.remoteJid;
+  const isGroup = chatId.endsWith("@g.us");
+
+  if (isGroup) {
+    const senderId = msg.key.participant || msg.key.remoteJid;
+    const mutePath = "./mute.json";
+    const muteData = fs.existsSync(mutePath) ? JSON.parse(fs.readFileSync(mutePath)) : {};
+    const muteList = muteData[chatId] || [];
+
+    if (muteList.includes(senderId)) {
+      global._muteCounter = global._muteCounter || {};
+      const key = `${chatId}:${senderId}`;
+      global._muteCounter[key] = (global._muteCounter[key] || 0) + 1;
+
+      const count = global._muteCounter[key];
+
+      if (count === 8) {
+        await sock.sendMessage(chatId, {
+          text: `⚠️ @${senderId.split("@")[0]} estás muteado.\nSigue enviando mensajes y podrías ser eliminado.`,
+          mentions: [senderId]
+        });
+      }
+
+      if (count === 13) {
+        await sock.sendMessage(chatId, {
+          text: `⛔ @${senderId.split("@")[0]} estás al límite.\nSi envías *otro mensaje*, serás eliminado del grupo.`,
+          mentions: [senderId]
+        });
+      }
+
+      if (count >= 15) {
+        const metadata = await sock.groupMetadata(chatId);
+        const user = metadata.participants.find(p => p.id === senderId);
+        const isAdmin = user?.admin === 'admin' || user?.admin === 'superadmin';
+
+        if (!isAdmin) {
+          await sock.groupParticipantsUpdate(chatId, [senderId], "remove");
+          await sock.sendMessage(chatId, {
+            text: `❌ @${senderId.split("@")[0]} fue eliminado por ignorar el mute.`,
+            mentions: [senderId]
+          });
+          delete global._muteCounter[key];
+        } else {
+          await sock.sendMessage(chatId, {
+            text: `🔇 @${senderId.split("@")[0]} es administrador y no se puede eliminar.`,
+            mentions: [senderId]
+          });
+        }
+      }
+
+      // eliminar mensaje
+      await sock.sendMessage(chatId, {
+        delete: {
+          remoteJid: chatId,
+          fromMe: false,
+          id: msg.key.id,
+          participant: senderId
+        }
+      });
+
+      return; // este return es interno, no afecta el resto
+    }
+  }
+} catch (err) {
+  console.error("❌ Error en lógica de muteo:", err);
+}
+// === FIN BLOQUEO DE MENSAJES DE USUARIOS MUTEADOS ===
+// === INICIO BLOQUEO DE COMANDOS A USUARIOS BANEADOS ===
+try {
+  const banPath = path.resolve("./ban.json");
+  const banData = fs.existsSync(banPath) ? JSON.parse(fs.readFileSync(banPath)) : {};
+
+  const messageText = msg.message?.conversation || msg.message?.extendedTextMessage?.text || "";
+  if (!messageText.startsWith(global.prefix)) return;
+
+  const commandOnly = messageText.slice(global.prefix.length).trim().split(" ")[0].toLowerCase();
+
+  const senderId = msg.key.participant || msg.key.remoteJid;
+  const senderClean = senderId.replace(/[^0-9]/g, "");
+  const senderLID = senderId; // ejemplo: 123456789012345@lid
+  const senderClassic = `${senderClean}@s.whatsapp.net`; // ejemplo: 521234567890@...
+
+  const isFromMe = msg.key.fromMe;
+  const isOwner = global.owner.some(([id]) => id === senderClean);
+
+  const groupBanList = banData[chatId] || [];
+
+  if ((groupBanList.includes(senderClassic) || groupBanList.includes(senderLID)) && !isOwner && !isFromMe) {
+    const frases = [
+      "🚫 @usuario estás baneado por pendejo. ¡Abusaste demasiado del bot!",
+      "❌ Lo siento @usuario, pero tú ya no puedes usarme. Aprende a comportarte.",
+      "🔒 No tienes permiso @usuario. Fuiste baneado por molestar mucho.",
+      "👎 ¡Bloqueado! @usuario abusaste del sistema y ahora no puedes usarme.",
+      "😤 Quisiste usarme pero estás baneado, @usuario. Vuelve en otra vida."
+    ];
+
+    const texto = frases[Math.floor(Math.random() * frases.length)].replace("@usuario", `@${senderClean}`);
+
+    await sock.sendMessage(chatId, {
+      text: texto,
+      mentions: [senderId]
+    }, { quoted: msg });
+
+    return;
+  }
+} catch (e) {
+  console.error("❌ Error procesando bloqueo de usuarios baneados:", e);
+}
+// === FIN BLOQUEO DE COMANDOS A USUARIOS BANEADOS ===    
+    
+// 🔐 Modo Privado activado
+    if (activos.modoPrivado) {
+      if (isGroup) {
+        if (!fromMe && !isOwner(sender)) return;
+      } else {
+        if (!fromMe && !isOwner(sender) && !isAllowedUser(sender)) return;
+      }
+    } else {
+      // 🎯 Modo Admins por grupo
+      if (isGroup && activos.modoAdmins?.[chatId]) {
+        try {
+          const metadata = await sock.groupMetadata(chatId);
+          const participant = metadata.participants.find(p => p.id.includes(sender));
+          const isAdmin = participant?.admin === "admin" || participant?.admin === "superadmin";
+          if (!isAdmin && !isOwner(sender) && !fromMe) return;
+        } catch (e) {
+          console.error("Error leyendo metadata:", e);
+          return;
+        }
+      }
+
+      
+
+      // 🔒 En privado si no es de la lista, no responde
+      if (!isGroup && !fromMe && !isOwner(sender) && !isAllowedUser(sender)) return;
+    }
+// === INICIO BLOQUEO DE COMANDOS SI EL BOT ESTÁ APAGADO EN EL GRUPO ===
+try {
+  const activosPath = "./activos.json";
+  const activos = fs.existsSync(activosPath)
+    ? JSON.parse(fs.readFileSync(activosPath, "utf-8"))
+    : {};
+
+  const isApagado = activos.apagado?.[chatId] === true;
+  const senderClean = sender.replace(/[^0-9]/g, "");
+  const isOwner = global.owner.some(([id]) => id === senderClean);
+
+  if (isGroup && isApagado && !isOwner) {
+    return; // Ignora comandos de usuarios comunes si el bot está apagado
+  }
+} catch (e) {
+  console.error("❌ Error en lógica de bloqueo por apagado:", e);
+}
+// === FIN BLOQUEO DE COMANDOS SI EL BOT ESTÁ APAGADO EN EL GRUPO ===
     
 // === INICIO BLOQUEO AUTOMÁTICO COMANDOS RPG AZURA ===
 try {
@@ -1360,7 +1377,8 @@ try {
   console.error("❌ Error procesando comando restringido:", e);
 }
 // === FIN LÓGICA DE COMANDOS RESTRINGIDOS ===    
-    
+
+
     // ✅ Procesar comando
     if (messageText.startsWith(global.prefix)) {
       const command = messageText.slice(global.prefix.length).trim().split(" ")[0];
