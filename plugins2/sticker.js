@@ -21,8 +21,15 @@ const handler = async (msg, { conn }) => {
   const usedPrefix = prefixes[subbotID] || ".";
 
   try {
+    // Detectar si es una respuesta a mensaje o mensaje con imagen/video directo
+    let mediaMsg = null;
     const quoted = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
-    const mediaMsg = quoted || msg.message;
+
+    if (quoted) {
+      mediaMsg = quoted;
+    } else if (msg.message?.imageMessage || msg.message?.videoMessage) {
+      mediaMsg = msg.message;
+    }
 
     const mediaType = mediaMsg?.imageMessage ? 'image' : mediaMsg?.videoMessage ? 'video' : null;
     if (!mediaType) {
@@ -39,16 +46,14 @@ const handler = async (msg, { conn }) => {
       react: { text: '🛠️', key: msg.key }
     });
 
-    const mediaStream = await downloadContentFromMessage(
-      mediaMsg[mediaType + 'Message'],
-      mediaType
-    );
+    const contentType = mediaType + "Message";
+    const mediaStream = await downloadContentFromMessage(mediaMsg[contentType], mediaType);
     let buffer = Buffer.alloc(0);
     for await (const chunk of mediaStream) buffer = Buffer.concat([buffer, chunk]);
 
     const metadata = {
-      packname: 'Sticker',
-      author: 'ᴀꜱᴀᴋᴜʀᴀ ᴍᴀᴏ ʙᴏᴛ 👑'
+      packname: "Sticker",
+      author: "ᴀꜱᴀᴋᴜʀᴀ ᴍᴀᴏ ʙᴏᴛ 👑"
     };
 
     const sticker = mediaType === 'image'
@@ -137,12 +142,9 @@ async function writeExifImg(media, metadata) {
   return await addExif(wMedia, metadata);
 }
 
-async function writeExifVid(media) {
+async function writeExifVid(media, metadata) {
   const wMedia = await videoToWebp(media);
-  return await addExif(wMedia, {
-    packname: 'Sticker',
-    author: 'ᴀꜱᴀᴋᴜʀᴀ ᴍᴀᴏ ʙᴏᴛ 👑'
-  });
+  return await addExif(wMedia, metadata);
 }
 
 async function addExif(webpBuffer, metadata) {
