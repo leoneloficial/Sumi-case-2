@@ -10,49 +10,40 @@ const tempFolder = path.join(__dirname, '../tmp/');
 if (!fs.existsSync(tempFolder)) fs.mkdirSync(tempFolder, { recursive: true });
 
 const handler = async (msg, { conn }) => {
-  const rawID = conn.user?.id || "";
+    const rawID = conn.user?.id || "";
   const subbotID = rawID.split(":")[0] + "@s.whatsapp.net";
 
+  // Obtener prefijo del subbot
   const prefixPath = path.resolve("prefixes.json");
   let prefixes = {};
   if (fs.existsSync(prefixPath)) {
     prefixes = JSON.parse(fs.readFileSync(prefixPath, "utf-8"));
   }
   const usedPrefix = prefixes[subbotID] || ".";
-
   try {
-    let mediaType, mediaMessage;
-
-    // Revisar si es una respuesta a mensaje con imagen/video
     const quoted = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
-    if (quoted) {
-      mediaType = quoted.imageMessage ? 'image' : quoted.videoMessage ? 'video' : null;
-      mediaMessage = quoted[`${mediaType}Message`];
-    }
-
-    // Si no es una respuesta, revisar si el mensaje actual trae media
-    if (!mediaType) {
-      if (msg.message?.imageMessage) {
-        mediaType = 'image';
-        mediaMessage = msg.message.imageMessage;
-      } else if (msg.message?.videoMessage) {
-        mediaType = 'video';
-        mediaMessage = msg.message.videoMessage;
-      }
-    }
-
-    // Si aún no hay media válida
-    if (!mediaType || !mediaMessage) {
+    if (!quoted) {
       return await conn.sendMessage(msg.key.remoteJid, {
-        text: `⚠️ *Envía o responde a una imagen o video con el comando \`${usedPrefix}s\` para crear un sticker.*`
+        text: `⚠️ *Responde a una imagen o video con el comando \`${usedPrefix}s\` para crear un sticker.*`
       }, { quoted: msg });
     }
+
+    const mediaType = quoted.imageMessage ? 'image' : quoted.videoMessage ? 'video' : null;
+    if (!mediaType) {
+      return await conn.sendMessage(msg.key.remoteJid, {
+        text: '⚠️ *Solo puedes convertir imágenes o videos en stickers.*'
+      }, { quoted: msg });
+    }
+
+    const senderName = msg.pushName || 'Usuario Desconocido';
+    const now = new Date();
+    const fechaCreacion = `📅 ${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()} 🕒 ${now.getHours()}:${now.getMinutes()}`;
 
     await conn.sendMessage(msg.key.remoteJid, {
       react: { text: '🛠️', key: msg.key }
     });
 
-    const mediaStream = await downloadContentFromMessage(mediaMessage, mediaType);
+    const mediaStream = await downloadContentFromMessage(quoted[`${mediaType}Message`], mediaType);
     let buffer = Buffer.alloc(0);
     for await (const chunk of mediaStream) buffer = Buffer.concat([buffer, chunk]);
 
@@ -78,6 +69,7 @@ const handler = async (msg, { conn }) => {
     await conn.sendMessage(msg.key.remoteJid, {
       text: '❌ *Hubo un error al procesar el sticker. Inténtalo de nuevo.*'
     }, { quoted: msg });
+
     await conn.sendMessage(msg.key.remoteJid, {
       react: { text: '❌', key: msg.key }
     });
