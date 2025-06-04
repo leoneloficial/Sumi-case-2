@@ -13,6 +13,7 @@ const handler = async (msg, { conn }) => {
   const rawID = conn.user?.id || "";
   const subbotID = rawID.split(":")[0] + "@s.whatsapp.net";
 
+  // Obtener prefijo
   const prefixPath = path.resolve("prefixes.json");
   let prefixes = {};
   if (fs.existsSync(prefixPath)) {
@@ -20,21 +21,41 @@ const handler = async (msg, { conn }) => {
   }
   const usedPrefix = prefixes[subbotID] || ".";
 
-  try {
-    // Detectar si es una respuesta a mensaje o mensaje con imagen/video directo
-    let mediaMsg = null;
-    const quoted = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+  const messageType = Object.keys(msg.message || {})[0] || "";
+  let text = "";
 
+  // Detectar texto en captions
+  if (messageType === "conversation") {
+    text = msg.message.conversation;
+  } else if (messageType === "extendedTextMessage") {
+    text = msg.message.extendedTextMessage.text;
+  } else if (messageType === "imageMessage" && msg.message.imageMessage.caption) {
+    text = msg.message.imageMessage.caption;
+  } else if (messageType === "videoMessage" && msg.message.videoMessage.caption) {
+    text = msg.message.videoMessage.caption;
+  }
+
+  if (!text || !text.trim().startsWith(usedPrefix + "s")) return;
+
+  try {
+    const quoted = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+    let mediaType, mediaMessage;
+
+    // Si es respuesta a multimedia
     if (quoted) {
-      mediaMsg = quoted;
-    } else if (msg.message?.imageMessage || msg.message?.videoMessage) {
-      mediaMsg = msg.message;
+      mediaType = quoted.imageMessage ? 'image' : quoted.videoMessage ? 'video' : null;
+      mediaMessage = quoted[mediaType + 'Message'];
     }
 
-    const mediaType = mediaMsg?.imageMessage ? 'image' : mediaMsg?.videoMessage ? 'video' : null;
-    if (!mediaType) {
+    // O si es multimedia enviado directamente
+    if (!mediaType && (messageType === 'imageMessage' || messageType === 'videoMessage')) {
+      mediaType = messageType === 'imageMessage' ? 'image' : 'video';
+      mediaMessage = msg.message[messageType];
+    }
+
+    if (!mediaType || !mediaMessage) {
       return await conn.sendMessage(msg.key.remoteJid, {
-        text: `⚠️ *Envía o responde a una imagen o video con el comando \`${usedPrefix}s\` para crear un sticker.*`
+        text: `⚠️ *Responde a una imagen o video con el comando \`${usedPrefix}s\` o envíalo como caption para crear un sticker.*`
       }, { quoted: msg });
     }
 
@@ -46,8 +67,7 @@ const handler = async (msg, { conn }) => {
       react: { text: '🛠️', key: msg.key }
     });
 
-    const contentType = mediaType + "Message";
-    const mediaStream = await downloadContentFromMessage(mediaMsg[contentType], mediaType);
+    const mediaStream = await downloadContentFromMessage(mediaMessage, mediaType);
     let buffer = Buffer.alloc(0);
     for await (const chunk of mediaStream) buffer = Buffer.concat([buffer, chunk]);
 
