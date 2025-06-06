@@ -13871,8 +13871,9 @@ case "s":
 
         // 🌟 Formato llamativo para la metadata del sticker 🌟
         let metadata = {
-            packname: `✨ Lo Mandó Hacer: ${senderName} ✨`,
-            author: `🤖 Bot Creador: Azura Ultra\n🛠️ Desarrollado por: 𝙍𝙪𝙨𝙨𝙚𝙡𝙡 xz💻\n${fechaCreacion}`
+
+            packname: `Sticker`,
+            author: `ᴀꜱᴀᴋᴜʀᴀ ᴍᴀᴏ ʙᴏᴛ 👑`
         };
 
         let stickerBuffer;
@@ -14984,9 +14985,16 @@ case "kick": {
 
     // Obtener usuario a expulsar
     let userToKick = null;
+    let motivo = "Sin motivo";
 
     if (msg.message?.extendedTextMessage?.contextInfo?.mentionedJid?.length > 0) {
       userToKick = msg.message.extendedTextMessage.contextInfo.mentionedJid[0];
+
+      // Obtener el motivo del mensaje (el texto luego de la mención)
+      const fullText = msg.message.extendedTextMessage.text || "";
+      const partes = fullText.split(" ");
+      const indexMencion = partes.findIndex(p => p.includes("@"));
+      motivo = partes.slice(indexMencion + 1).join(" ").trim() || "Sin motivo";
     } else if (msg.message?.extendedTextMessage?.contextInfo?.participant) {
       userToKick = msg.message.extendedTextMessage.contextInfo.participant;
     }
@@ -15015,7 +15023,7 @@ case "kick": {
     await sock.groupParticipantsUpdate(chatId, [userToKick], "remove");
 
     await sock.sendMessage(chatId, {
-      text: `🚷 *El usuario @${userToKick.split("@")[0]} ha sido expulsado del grupo.*`,
+      text: `🚷 *El usuario @${userToKick.split("@")[0]} ha sido expulsado del grupo.*\n📄 *Motivo:* ${motivo}`,
       mentions: [userToKick]
     }, { quoted: msg });
 
@@ -15026,8 +15034,7 @@ case "kick": {
     }, { quoted: msg });
   }
   break;
-}
-        
+}      
         
 case "instagram":
 case "ig":
