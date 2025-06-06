@@ -13656,7 +13656,7 @@ case 'toimg': {
 
     if (!msg.message.extendedTextMessage?.contextInfo?.quotedMessage?.stickerMessage) {
         return sock.sendMessage(msg.key.remoteJid, { 
-            text: "⚠️ *Debes responder a un sticker para convertirlo en imagen.*" 
+            text: "《✧》por favor, envia una imagen o video para hacer sticker." 
         }, { quoted: msg });
     }
 
@@ -13830,7 +13830,7 @@ case "s":
     try {
         let quoted = msg.message.extendedTextMessage?.contextInfo?.quotedMessage;
         if (!quoted) {
-        const xds = `👾 *Uso correcto:*\nResponde a una imagen/video con "${global.prefix}s" para convertirlo en sticker\n\nEjemplo: Responde a una foto con ${global.prefix}s`
+        const xds = `《✧》por favor, envia una imagen o video para hacer sticker.`
             await sock.sendMessage(msg.key.remoteJid, {  // <- Mensaje directo normal
                 text: xds
             }, { quoted: msg });
