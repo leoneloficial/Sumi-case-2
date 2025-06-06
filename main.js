@@ -279,30 +279,18 @@ case 'play': {
     const author = video.author.name;
     const thumbnail = video.thumbnail;
 
-    const info = `
-╔═══════════════╗
-║✦ 𝘼𝙕𝙐𝙍𝘼 𝙐𝗹𝗍𝗋𝗮 2.0 BOT✦
-╚═══════════════╝
-📀 *𝙄𝗻𝗳𝗼 𝗱𝗲𝗹 𝘃𝗶𝗱𝗲𝗼:*  
-╭───────────────╮  
-├ 🎼 *Título:* ${title}
-├ ⏱️ *Duración:* ${duration}
-├ 👁️ *Vistas:* ${views}
-├ 👤 *Autor:* ${author}
-└ 🔗 *Link:* ${videoUrl}
-╰───────────────╯
-📥 *Opciones de Descargas si usas termux o estás en otros host que no sea Sky Ultra Plus:*  
-┣ 🎵 *Audio:* _${global.prefix}play5 boza hoy_
-┣ 🎥 *Video:* _${global.prefix}play6 boza hoy_
-┗ ⚠️ *¿No se reproduce?* Usa _${global.prefix}ff_
-═════════════════════  
-   𖥔 Azura Ultra 𖥔
-═════════════════════
-✳️ *Para descargar desde este mensaje:*
-• Responde con *1* o *audio* para recibir la música.
-• Responde con *2* o *video* para recibir el video.
-• Responde con *3* o *musicadoc* para recibir música como documento.
-• Responde con *4* o *videodoc* para recibir el video como documento.
+        const info = `*「✦」 Título:* *${title}*
+
+> ✦ *Autor:* ${author}
+> ⴵ *Duración:* ${duration}
+> ✰ *Vistas:* ${views} 
+> 🜸 *Link:* ${videoUrl}
+
+ ✎ *Para descargar desde este mensaje:*
+> ✿ Responde con *1* o *audio* para recibir la música.
+> ✿ Responde con *2* o *video* para recibir el video.
+> ✿ Responde con *3* o *musicadoc* para recibir música como documento.
+> ✿ Responde con *4* o *videodoc* para recibir el video como documento.
 `;
 
     const sent = await sock.sendMessage(chatId, {
@@ -354,30 +342,18 @@ case 'play2': {
     const author = video.author.name;
     const thumbnail = video.thumbnail;
 
-    const info = `
-╔═════════════════╗
-║✦ 𝘼𝙕𝙐𝙍𝘼 𝙐𝗹𝗍𝗋𝗮 2.0 BOT✦
-╚═════════════════╝
-📀 *𝙄𝗻𝗳𝗼 𝗱𝗲𝗹 𝘃𝗶𝗱𝗲𝗼:*  
-╭───────────────╮  
-├ 🎼 *Título:* ${title}
-├ ⏱️ *Duración:* ${duration}
-├ 👁️ *Vistas:* ${views}
-├ 👤 *Autor:* ${author}
-└ 🔗 *Link:* ${videoUrl}
-╰───────────────╯
-📥 *Opciones de Descargas si usas termux o estás en otros host que no sea Sky Ultra Plus:*  
-┣ 🎵 *Audio:* _${global.prefix}play5 boza hoy_
-┣ 🎥 *Video:* _${global.prefix}play6 boza hoy_
-┗ ⚠️ *¿No se reproduce?* Usa _${global.prefix}ff_
-═════════════════════  
-   𖥔 Azura Ultra  𖥔
-═════════════════════
-✳️ *Para descargar desde este mensaje:*
-• Responde con *1* o *audio* para recibir la música.
-• Responde con *2* o *video* para recibir el video.
-• Responde con *3* o *musicadoc* para recibir música como documento.
-• Responde con *4* o *videodoc* para recibir el video como documento.
+        const info = `*「✦」Título:* *${title}*
+
+> ✦ *Autor:* ${author}
+> ⴵ  *Duración:* ${duration}
+> ✰ *Vistas:* ${views}
+> 🜸  *Link:* ${videoUrl}
+
+✎ *Para descargar desde este mensaje:*
+> ✿ Responde con *1* o *audio* para recibir la música.
+> ✿ Responde con *2* o *video* para recibir el video.
+> ✿ Responde con *3* o *musicadoc* para recibir música como documento.
+> ✿ Responde con *4* o *videodoc* para recibir el video como documento.
 `;
 
     const sent = await sock.sendMessage(chatId, {
@@ -420,19 +396,18 @@ case "menuaudio": {
         // Leer archivo guar.json
         let guarData = JSON.parse(fs.readFileSync("./guar.json", "utf-8"));
         
-        let listaMensaje = `┏━━━━━━━━━━━━━━━┓
-┃  📂 *MENÚ DE MULTIMEDIA*  
-┃  🔑 *Palabras Clave Guardadas*  
+                let listaMensaje = `┏━━━━━━━━━━━━━━━┓
+┃  ❏ *MENÚ DE MULTIMEDIA*  
+┃  ✎ *Palabras Clave Guardadas*  
 ┗━━━━━━━━━━━━━━━┛
 
-📌 *¿Cómo recuperar un archivo guardado?*  
+✎ *¿Cómo recuperar un archivo guardado?*  
 Usa el comando:  
-➡️ _${global.prefix}g palabra_clave_  
+➭ _${global.prefix}g palabra_clave_  
 ( *o puedes solo escribirlas tambien y bot las envia tambien* ) 
 
-📂 *Lista de palabras clave guardadas:*  
+❏ *Lista de palabras clave guardadas:*  
 ━━━━━━━━━━━━━━━━━━━\n`;
-
         let claves = Object.keys(guarData);
         
         if (claves.length === 0) {
