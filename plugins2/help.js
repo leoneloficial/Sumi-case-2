@@ -15,82 +15,92 @@ const handler = async (msg, { conn }) => {
 
   // Reacción normal (no cambia)
   await conn.sendMessage(msg.key.remoteJid, {
-    react: { text: "📜", key: msg.key }
+    react: { text: "🩷", key: msg.key }
   });
 
   const menu = `> ✿ bienvenid@ al menú del subot de sumi sakurasawa
 
-〔 👇Has Que Tus Amigos Sean *SUBBOTS* Tambien Diles que envien estos comandos👇 〕
-⟢ ${usedPrefix}serbot / qr
-⟢ ${usedPrefix}code / codigo 
-⟢ ${usedPrefix}sercode / codigo
+✐; *✿*→ ᴘᴀʀᴀ ᴄʀᴇᴀʀ ᴜɴ sᴜʙ-ʙᴏᴛ ᴄᴏɴ ᴛᴜ ɴᴜᴍᴇʀᴏ ᴜᴛɪʟɪᴢᴀ *#qr* o *#code*
+#✎ ${usedPrefix}serbot / qr
+#✎ ${usedPrefix}code / codigo 
+#✎ ${usedPrefix}sercode / codigo
+> esto es para que te hagas Sub bot 
 
-〔 AI & Respuestas 〕
-⟢ ${usedPrefix}chatgpt
-⟢ ${usedPrefix}geminis
+➮   *IA PUEDES RESPUESTA*
 
-〔 Descargas 〕
-⟢ ${usedPrefix}play / ${usedPrefix}playdoc
-⟢ ${usedPrefix}play2 / ${usedPrefix}play2doc
-⟢ ${usedPrefix}play5
-⟢ ${usedPrefix}play6
-⟢ ${usedPrefix}ytmp3 / ${usedPrefix}ytmp3doc
-⟢ ${usedPrefix}ytmp35
-⟢ ${usedPrefix}ytmp4 / ${usedPrefix}ytmp4doc
-⟢ ${usedPrefix}ytmp45
-⟢ ${usedPrefix}apk
-⟢ ${usedPrefix}instagram / ${usedPrefix}ig
-⟢ ${usedPrefix}tiktok / ${usedPrefix}tt
-⟢ ${usedPrefix}facebook / ${usedPrefix}fb
+#✎ ${usedPrefix}chatgpt
+#✎ ${usedPrefix}geminis
+> ᥫ᭡con la ia puedes buscar lo que quieras puede servir para los estudios 
 
-〔 Stickers & Multimedia 〕
-⟢ ${usedPrefix}s
-⟢ ${usedPrefix}ver
-⟢ ${usedPrefix}toaudio 
-⟢ ${usedPrefix}hd
-⟢ ${usedPrefix}toimg
-⟢ ${usedPrefix}whatmusic
-⟢ ${usedPrefix}tts
-⟢ ${usedPrefix}perfil
+➮    *DESCARGAS*
 
-〔 Grupos 〕
-⟢ ${usedPrefix}abrirgrupo
-⟢ ${usedPrefix}cerrargrupo
-⟢ ${usedPrefix}infogrupo
-⟢ ${usedPrefix}kick
-⟢ ${usedPrefix}modoadmins on o off
-⟢ ${usedPrefix}antilink on o off
-⟢ ${usedPrefix}welcome on o off
-⟢ ${usedPrefix}tag
-⟢ ${usedPrefix}tagall / ${usedPrefix}invocar / ${usedPrefix}todos
-⟢ ${usedPrefix}infogrupo
-⟢ ${usedPrefix}damelink
+#✎ ${usedPrefix}play / ${usedPrefix}playdoc
+#✎ ${usedPrefix}play2 / ${usedPrefix}play2doc
+#✎ ${usedPrefix}play5
+#✎ ${usedPrefix}play6
+#✎ ${usedPrefix}ytmp3 / ${usedPrefix}ytmp3doc
+#✎ ${usedPrefix}ytmp35
+#✎ ${usedPrefix}ytmp4 / ${usedPrefix}ytmp4doc
+#✎ ${usedPrefix}ytmp45
+#✎ ${usedPrefix}apk
+#✎ ${usedPrefix}instagram / ${usedPrefix}ig
+#✎ ${usedPrefix}tiktok / ${usedPrefix}tt
+#✎ ${usedPrefix}facebook / ${usedPrefix}fb
+> ᥫ᭡con esto puedes descargar lo que gustes con el enlace o sin el enlace 
 
-〔 Comandos De Juegos 〕
-⟢ ${usedPrefix}verdad
-⟢ ${usedPrefix}reto
-⟢ ${usedPrefix}memes o meme
+➮   *sticker y mas*
 
-〔 Configuración & Dueño 〕
+#✎ ${usedPrefix}s
+#✎ ${usedPrefix}ver
+#✎ ${usedPrefix}toaudio 
+#✎ ${usedPrefix}hd
+#✎ ${usedPrefix}toimg
+#✎ ${usedPrefix}whatmusic
+#✎ ${usedPrefix}tts
+#✎ ${usedPrefix}perfil
+> ᥫ᭡puedes hacer stickers y mejorar imágenes o saber que música buscas etc. 
 
-▣ ${usedPrefix}setprefix ↷
+➮   *GRUPO*
+
+#✎ ${usedPrefix}abrirgrupo
+#✎ ${usedPrefix}cerrargrupo
+#✎ ${usedPrefix}infogrupo
+#✎ ${usedPrefix}kick
+#✎ ${usedPrefix}modoadmins on o off
+#✎ ${usedPrefix}antilink on o off
+#✎ ${usedPrefix}welcome on o off
+#✎ ${usedPrefix}tag
+#✎ ${usedPrefix}tagall / ${usedPrefix}invocar / ${usedPrefix}todos
+#✎ ${usedPrefix}infogrupo
+#✎ ${usedPrefix}damelink
+> ᥫ᭡puedes configurar el. bot en los grupos
+
+➮   *COMANDO Y JUEGOS*
+
+#✎ ${usedPrefix}verdad
+#✎ ${usedPrefix}reto
+#✎ ${usedPrefix}memes o meme
+> ᥫ᭡comandos de juegos 
+
+➮ *CONFIGURACIÓN OWENER*
+
+#✎ ${usedPrefix}setprefix ↷
   Cambiar prefijo del subbot
-▣ ${usedPrefix}creador ↷
+#✎ ${usedPrefix}creador ↷
   Contacto del creador
-▣ ${usedPrefix}get ↷
+#✎ ${usedPrefix}get ↷
   Descargar estados
-▣ ${usedPrefix}addgrupo ↷
+#✎ ${usedPrefix}addgrupo ↷
   Autorizar grupo pa que lo usen.
-▣ ${usedPrefix}addlista ↷
+#✎ ${usedPrefix}addlista ↷
   Autorizar usuario privado pa lo usen.
-▣ ${usedPrefix}dellista ↷
+#✎ ${usedPrefix}dellista ↷
   Quitar usuario autorizado pa que o lo usen.
-▣ ${usedPrefix}delgrupo ↷
+#✎ ${usedPrefix}delgrupo ↷
   Eliminar grupo autorizado pa que no lo usen.
-▣ ${usedPrefix}pong ↷
+#✎ ${usedPrefix}pong ↷
   Medir latencia del bot
-
-═⌬Azura Ultra & cortana Subbot⌬═`;
+> ᥫ᭡aquí sólo puede ser el creador o personas de colaboración`;
 
   // Mensaje principal con sendMessage2
   await conn.sendMessage2(
