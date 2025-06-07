@@ -1,6 +1,6 @@
 (async () => {
 let canalId = ["120363324350463849@newsletter"];  
-let canalNombre = ["👾 AZURA ULTRA 2.0 BOT 👾"]
+let canalNombre = ["❤️̶۫̄͟Ⓢ︎𓏲S͟u͟m͟m͟i͟𓍲̈͜𝗨̴ᥣ̥𝗍̈rᥲ̄𓊓̵̬𝐁o̸t̸❤️"]
   function setupConnection(conn) {
   conn.sendMessage2 = async (chat, content, m, options = {}) => {
     const firstChannel = { 
