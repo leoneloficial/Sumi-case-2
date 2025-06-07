@@ -18,10 +18,7 @@ const handler = async (msg, { conn }) => {
     react: { text: "📜", key: msg.key }
   });
 
-  const menu = `
-╔⌬AZURA & CORTANA SUBBOT⌬╗
-║   Menú por categorías  
-╚═──────────────────═╝
+  const menu = `> ✿ bienvenid@ al menú del subot de sumi sakurasawa
 
 〔 👇Has Que Tus Amigos Sean *SUBBOTS* Tambien Diles que envien estos comandos👇 〕
 ⟢ ${usedPrefix}serbot / qr
