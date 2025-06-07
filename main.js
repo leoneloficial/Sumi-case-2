@@ -3962,13 +3962,13 @@ Así te registras
 │ 𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼          
 ╰────────────╯`;
 
-    const videoUrl = "https://cdn.russellxz.click/0abb8549.jpeg";
+    const videoUrl = "https://cdn.russellxz.click/dccaa709.jpeg";
     const videoBuffer = (await axios.get(videoUrl, { responseType: 'arraybuffer' })).data;
 
 await sock.sendMessage2(
   chatId,
   {
-    image: { url: "https://cdn.russellxz.click/70109295.jpeg" }, 
+    image: { url: "https://cdn.russellxz.click/dccaa709.jpeg" }, 
     caption: menuText
   },
   msg 
@@ -3988,7 +3988,7 @@ case 'menu': {
   try {
     // Reacción inicial (se mantiene sendMessage normal)
     await sock.sendMessage(msg.key.remoteJid, {
-      react: { text: "📜", key: msg.key }
+      react: { text: "🤍", key: msg.key }
     });
 
     const chatId = msg.key.remoteJid;
@@ -4125,7 +4125,7 @@ case 'menu': {
     await sock.sendMessage2(
   chatId,
   {
-    image: { url: "https://cdn.russellxz.click/752ef2f1.jpeg" }, 
+    image: { url: "https://cdn.russellxz.click/dccaa709.jpeg" }, 
     caption: captionText 
   },
   msg 
