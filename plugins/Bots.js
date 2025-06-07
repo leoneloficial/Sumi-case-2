@@ -35,7 +35,7 @@ const handler = async (msg, { conn }) => {
     mentions.push(fullJid);
     const prefijo = dataPrefijos[fullJid] || ".";
 
-    return `> *Subbot ${i + 1}*\n> Número: @${jid}\n> Prefijo: *${prefijo}*\n───────────────`;
+    return `> *❀Subbot ${i + 1}*\n> ❀Número: @${jid}\n> Prefijo: *${prefijo}*\n───────────────`;
   }).join("\n\n");
 
   // Construir mensaje final
