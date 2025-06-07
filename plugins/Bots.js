@@ -39,7 +39,10 @@ const handler = async (msg, { conn }) => {
   }).join("\n\n");
 
   // Construir mensaje final
-  const menu = `\n│> ❀Subbots Conectados\n> Total: *${total}*\n╰━━━━━━━━━━━━⬣\n\n${lista}`;
+  const menu = `\n*「✦」subbots activos*
+
+❀ para ser un subbot usa el comando *#code*
+ *❀Subbots Conectados*\n> Total: *${total}*\n\n\n${lista}`;
 
   // Enviar usando sendMessage2
   await conn.sendMessage2(
