@@ -47,7 +47,7 @@ const handler = async (msg, { conn, text }) => {
 > ✦ *Autor:* ${channel}
 > ⴵ *Duración:* ${fduration}
 > ✰ *Vistas:* ${views}
-> 🔗 *Enlace:* ${videoUrl}`;
+> 🜸 *Enlace:* ${videoUrl}`;
 
     await conn.sendMessage(msg.key.remoteJid, {
       image: { url: thumbnail },
