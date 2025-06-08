@@ -44,10 +44,10 @@ const handler = async (msg, { conn, text }) => {
 
     const infoMessage = `*「✦」Título:* ${title}
 
-> ✦ *Autor:* ${channel}
-> ⴵ *Duración:* ${fduration}
-> ✰ *Vistas:* ${views}
-> 🜸 *Enlace:* ${videoUrl}`;
+> ✦ *Autor:* » ${channel}
+> ⴵ *Duración:* » ${fduration}
+> ✰ *Vistas:* » ${views}
+> 🜸 *Enlace:* » ${videoUrl}`;
 
     await conn.sendMessage(msg.key.remoteJid, {
       image: { url: thumbnail },
