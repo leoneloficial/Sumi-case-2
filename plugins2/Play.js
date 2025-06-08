@@ -45,7 +45,7 @@ const handler = async (msg, { conn, text }) => {
     const infoMessage = `*「✦」Título:* ${title}
 
 > ✦ *Autor:* ${channel}
-> ⏱️ *Duración:* ${fduration}
+> ⴵ *Duración:* ${fduration}
 > ✰ *Vistas:* ${views}
 > 🔗 *Enlace:* ${videoUrl}`;
 
