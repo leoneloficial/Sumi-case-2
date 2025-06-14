@@ -11,7 +11,7 @@ const handler = async (msg, { conn, args }) => {
 
   if (!isGroup) {
     return conn.sendMessage(chatId, {
-      text: "❌ Este comando solo puede usarse en grupos."
+      text: "《✧》 Este comando solo puede usarse en grupos."
     }, { quoted: msg });
   }
 
@@ -20,7 +20,7 @@ const handler = async (msg, { conn, args }) => {
 
   if (!isAdmin && !isOwner && !isFromMe) {
     return conn.sendMessage(chatId, {
-      text: "🚫 Solo los administradores del grupo, el owner del bot o el mismo bot pueden usar este comando."
+      text: "《✧》 Solo los administradores del grupo, el owner del bot o el mismo bot pueden usar este comando."
     }, { quoted: msg });
   }
 
@@ -41,12 +41,12 @@ const handler = async (msg, { conn, args }) => {
   if (args[0].toLowerCase() === "on") {
     activos.antidelete[chatId] = true;
     await conn.sendMessage(chatId, {
-      text: "✅ Antidelete *activado* en este grupo."
+      text: "《✦》 Antidelete *activado* en este grupo."
     }, { quoted: msg });
   } else {
     delete activos.antidelete[chatId];
     await conn.sendMessage(chatId, {
-      text: "✅ Antidelete *desactivado* en este grupo."
+      text: "《✦》 Antidelete *desactivado* en este grupo."
     }, { quoted: msg });
   }
 
