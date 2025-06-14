@@ -594,7 +594,7 @@ case "modoprivado": {
 
     if (!isOwner(senderNumber) && !isBotMessage) {
       await sock.sendMessage(msg.key.remoteJid, {
-        text: "❌ Este comando es solo para el *dueño del bot*."
+        text: "《✧》 Este comando es solo para el *dueño del bot*."
       }, { quoted: msg });
       break;
     }
@@ -891,21 +891,15 @@ Usa ${global.prefix}serbot para volver a conectar.`
 
               default:
                 await sock.sendMessage(msg.key.remoteJid, {
-                  text: `╭───〔 * SUBBOT* 〕───╮
-│
-│✐ *Problema de conexión detectado:*
-│ ${messageError}
-│ Intentando reconectar...
-│
-│ ✿ Si seguir en problemas, En ese caso, simplemente ejecuta:
-│ #delbots
-│ para eliminar tu sesión y luego vuelve a conectarte usando:
-│ #serbot o para code si no quieres qr usa: #code o #sercode. 
-│ hasta que se conecte correctamente.
-│
-│ Esto ayuda a establecer una conexión *estable y funcional*.
-│
-╰────✦ *sumi bot* ✦────╯`
+                  text: `✐ *Problema de conexión detectado:*
+${messageError}
+Intentando reconectar...
+
+ ✿ Si seguir en problemas, En ese caso, simplemente ejecuta:
+ #delbots
+para eliminar tu sesión y luego vuelve a conectarte usando:
+ #serbot o para code si no quieres qr usa: #code o #sercode. 
+ hasta que se conecte correctamente`
                 }, { quoted: msg });
                 break;
             }
@@ -1449,7 +1443,7 @@ case 'ff2': {
 
     if (!audioMsg && !isAudioDoc) {
         await sock.sendMessage(msg.key.remoteJid, {
-            text: `✳️ Responde a un *audio* o *mp3 dañado* para repararlo.`
+            text: `《✧》 Responde a un *audio* o *mp3 dañado* para repararlo.`
         }, { quoted: msg });
         break;
     }
@@ -1524,7 +1518,7 @@ case 'tag': {
 
     // Verificar que se use en un grupo
     if (!chatId.endsWith("@g.us")) {
-      await sock.sendMessage(chatId, { text: "⚠️ Este comando solo se puede usar en grupos." }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 Este comando solo se puede usar en grupos." }, { quoted: msg });
       return;
     }
 
@@ -1536,7 +1530,7 @@ case 'tag': {
 
     if (!isAdmin && !isBot) {
       return await sock.sendMessage(chatId, {
-        text: "❌ Solo los administradores del grupo o el bot pueden usar este comando."
+        text: "《✧》 Solo los administradores del grupo o el bot pueden usar este comando."
       }, { quoted: msg });
     }
 
@@ -1596,7 +1590,7 @@ case 'tag': {
     }
 
     if (!messageToForward) {
-      await sock.sendMessage(chatId, { text: "⚠️ Debes responder a un mensaje o proporcionar un texto para reenviar." }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 Debes responder a un mensaje o proporcionar un texto para reenviar." }, { quoted: msg });
       return;
     }
 
@@ -1622,14 +1616,14 @@ case 'linia': {
 
     if (!isOwner) {
         await sock.sendMessage(msg.key.remoteJid, {
-            text: '⛔ Este comando es solo para el *Owner*.'
+            text: '《✧》 Este comando es solo para el *Owner*.'
         }, { quoted: msg });
         break;
     }
 
     if (!text) {
         await sock.sendMessage(msg.key.remoteJid, {
-            text: `✳️ Usa el comando correctamente:\n\n📌 Ejemplo: *${global.prefix}linia play*`
+            text: `✎ Usa el comando correctamente:\n\n> ✎ Ejemplo: *${global.prefix}linia play*`
         }, { quoted: msg });
         break;
     }
@@ -1652,14 +1646,14 @@ case 'linia': {
 
         if (!found) {
             await sock.sendMessage(msg.key.remoteJid, {
-                text: `❌ No se encontró el comando *${text}* en el archivo *main.js*.`
+                text: `✎ No se encontró el comando *${text}* en el archivo *main.js*.`
             }, { quoted: msg });
         }
 
     } catch (err) {
         console.error(err);
         await sock.sendMessage(msg.key.remoteJid, {
-            text: `❌ Error al leer el archivo: ${err.message}`
+            text: `✎ Error al leer el archivo: ${err.message}`
         }, { quoted: msg });
     }
 
@@ -1679,7 +1673,7 @@ case 'linia': {
     const quotedMsg = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
     if (!quotedMsg || !quotedMsg.videoMessage) {
         await sock.sendMessage(msg.key.remoteJid, {
-            text: `✳️ Responde a un *video* para optimizarlo para WhatsApp.`
+            text: `《✧》Responde a un *video* para optimizarlo para WhatsApp.`
         }, { quoted: msg });
         break;
     }
@@ -1756,7 +1750,7 @@ case "git": {
         // Verificar que el comando solo lo use el owner
         if (!isOwner(sender)) {
             await sock.sendMessage(msg.key.remoteJid, {
-                text: "⚠️ *Solo el propietario puede usar este comando.*"
+                text: "《✧》 *Solo el propietario puede usar este comando.*"
             }, { quoted: msg });
             return;
         }
@@ -1764,7 +1758,7 @@ case "git": {
         // Verificar si se proporcionó un comando
         if (!args[0]) {
             await sock.sendMessage(msg.key.remoteJid, {
-                text: "⚠️ *Debes especificar el nombre de un comando.*\nEjemplo: `.git rest`"
+                text: "《✧》 *Debes especificar el nombre de un comando.*\nEjemplo: `.git rest`"
             }, { quoted: msg });
             return;
         }
@@ -1773,7 +1767,7 @@ case "git": {
         const mainFilePath = "./main.js";
         if (!fs.existsSync(mainFilePath)) {
             await sock.sendMessage(msg.key.remoteJid, {
-                text: "❌ *Error:* No se encontró el archivo de comandos."
+                text: "✎ *Error:* No se encontró el archivo de comandos."
             }, { quoted: msg });
             return;
         }
@@ -1821,7 +1815,7 @@ case 'ytmp4': {
 
     if (!text || (!text.includes('youtube.com') && !text.includes('youtu.be'))) {
         await sock.sendMessage(msg.key.remoteJid, {
-            text: `✳️ Usa el comando correctamente:\n\n📌 Ejemplo: *${global.prefix}ytmp4* https://youtube.com/watch?v=...`
+            text: `✎ Usa el comando correctamente:\n\n> ✎ Ejemplo: *${global.prefix}ytmp4* https://youtube.com/watch?v=...`
         }, { quoted: msg });
         break;
     }
@@ -1877,25 +1871,15 @@ case 'ytmp4': {
             throw new Error('El video descargado está vacío o incompleto');
         }
 
-        const caption = `
-╔═════════════════╗
-║✦ 𝘼𝙕𝙐𝙍𝘼 𝙐𝙇𝙏𝙍𝘼 𝟮.𝟬 𝗕𝗢𝗧 ✦
-╚═════════════════╝
+        const caption = ` *「✦」Título:* ${videoData.title}
 
-📀 *𝙄𝙣𝙛𝙤 𝙙𝙚𝙡 𝙫𝙞𝙙𝙚𝙤:*  
-╭───────────────╮  
-├ 🎼 *Título:* ${videoData.title}
-├ ⏱️ *Duración:* ${videoData.duration}
-├ 👁️ *Vistas:* ${videoData.views}
-├ 👤 *Canal:* ${videoData.channel}
-├ 🗓️ *Publicado:* ${videoData.publish}
-├ 📦 *Tamaño:* ${videoData.size}
-├ 📹 *Calidad:* ${videoData.quality}
-└ 🔗 *Link:* https://youtu.be/${videoData.id}
-╰───────────────╯
-┗ ⚠️ *¿No se reproduce?* Usa _${global.prefix}ff_
-
-⏳ *Procesado por Azura Ultra*`;
+> ✦ *Canal:* ${videoData.channel}
+> ⴵ *Duración:* ${videoData.duration}
+> ✰ *Vistas:* ${videoData.views}
+> ✎ *Publicado:* ${videoData.publish}
+> ❏ *Tamaño:* ${videoData.size}
+> ☁︎ *Calidad:* ${videoData.quality}
+> 🜸 *Link:* https://youtu.be/${videoData.id}`;
 
         await sock.sendMessage(msg.key.remoteJid, {
             video: fs.readFileSync(filePath),
@@ -1931,7 +1915,7 @@ case 'ytmp4': {
 
     if (!args.length) {
         await sock.sendMessage(msg.key.remoteJid, { 
-            text: `⚠️ *Uso incorrecto.*\n📌 Ejemplo: \`${global.prefix}tiktoksearch <query>\`` 
+            text: `《✧》 por favor ingrese el nombre \n> ✎ Ejemplo: \`${global.prefix}tiktoksearch <query>\`` 
         }, { quoted: msg });
         return;
     }
@@ -1955,17 +1939,17 @@ case 'ytmp4': {
         const results = response.data.data.slice(0, 5);
 
         const resultText = results.map((video, index) => `
-📌 *Resultado ${index + 1}:*
-📹 *Título:* ${video.title}
-👤 *Autor:* ${video.author.nickname} (@${video.author.username})
-👀 *Reproducciones:* ${video.play.toLocaleString()}
-❤️ *Me gusta:* ${video.like.toLocaleString()}
-💬 *Comentarios:* ${video.coment.toLocaleString()}
-🔗 *Enlace:* ${video.url}
+✎ *Resultado ${index + 1}:*
+> *「✦」 Título:* ${video.title}
+> ✦ *Autor:* ${video.author.nickname} (@${video.author.username})
+> ☕︎︎ *Reproducciones:* ${video.play.toLocaleString()}
+> ♥︎ *Me gusta:* ${video.like.toLocaleString()}
+> ❍ *Comentarios:* ${video.coment.toLocaleString()}
+> 🜸 *Enlace:* ${video.url}
         `).join('\n');
 
         await sock.sendMessage(msg.key.remoteJid, { 
-            text: `🔍 *Resultados de búsqueda en TikTok para "${query}":*\n\n${resultText}` 
+            text: `✎ *Resultados de búsqueda en TikTok para "${query}":*\n\n${resultText}` 
         }, { quoted: msg });
 
         await sock.sendMessage(msg.key.remoteJid, { 
@@ -2044,7 +2028,7 @@ case 'ytmp3': {
 
   if (!text || !isYoutubeUrl) {
     await sock.sendMessage(msg.key.remoteJid, {
-      text: `✳️ Usa el comando correctamente, mi rey:\n\n📌 Ejemplo: *${global.prefix}ytmp3* https://music.youtube.com/watch?v=abc123`
+      text: ` ✎ por favor ingrese el enlace \n\n> ✎ Ejemplo: *${global.prefix}ytmp3* https://music.youtube.com/watch?v=abc123`
     }, { quoted: msg });
     break;
   }
@@ -2067,13 +2051,13 @@ case 'ytmp3': {
 
     if (sizeMBFromApi > 99) {
       return await sock.sendMessage(msg.key.remoteJid, {
-        text: `❌ El audio pesa ${sizeMBFromApi.toFixed(2)}MB y excede el límite de 99MB.\n\n🔒 Solo se permiten descargas menores a 99MB para no saturar los servidores.`
+        text: `《✧》 El audio pesa ${sizeMBFromApi.toFixed(2)}MB y excede el límite de 99MB.\n\n> ✎ Solo se permiten descargas menores a 99MB para no saturar los servidores.`
       }, { quoted: msg });
     }
 
     await sock.sendMessage(msg.key.remoteJid, {
       image: { url: thumbnail },
-      caption: `🎧 *Título:* ${title}\n🕒 *Duración:* ${fduration}\n📥 *Tamaño:* ${sizeMBFromApi.toFixed(2)}MB\n\n⏳ Procesando audio...`
+      caption: `*「✦」Título:* ${title}\n> ⴵ  *Duración:* ${fduration}\n> ❏ *Tamaño:* ${sizeMBFromApi.toFixed(2)}MB`
     }, { quoted: msg });
 
     const response = await axios.get(data.url, { responseType: 'stream' });
@@ -2088,7 +2072,7 @@ case 'ytmp3': {
       .on('error', err => {
         console.error(err);
         sock.sendMessage(msg.key.remoteJid, {
-          text: `❌ Error procesando audio Talvez excede el límite de 99MB: ${err.message}`
+          text: `✎ Error procesando audio Talvez excede el límite de 99MB: ${err.message}`
         }, { quoted: msg });
       })
       .on('end', async () => {
@@ -2136,7 +2120,7 @@ case 'play3': {
 
     if (!text) {
         await sock.sendMessage(msg.key.remoteJid, {
-            text: `⚠️ Escribe lo que deseas buscar en Spotify.\nEjemplo: *${global.prefix}play3* Marshmello - Alone`
+            text: `《✧》 Escribe lo que deseas buscar en Spotify.\n> Ejemplo: *${global.prefix}play3* Marshmello - Alone`
         }, { quoted: msg });
         break;
     }
@@ -2144,20 +2128,19 @@ case 'play3': {
     try {
         const res = await axios.get(`${apis.delirius}search/spotify?q=${encodeURIComponent(text)}&limit=1`);
         if (!res.data.data || res.data.data.length === 0) {
-            throw '❌ No se encontraron resultados en Spotify.';
+            throw '《✧》 No se encontraron resultados en Spotify.';
         }
 
         const result = res.data.data[0];
         const img = result.image;
         const url = result.url;
-        const info = `⧁ 𝙏𝙄𝙏𝙐𝙇𝙊: ${result.title}
-⧁ 𝘼𝙍𝙏𝙄𝙎𝙏𝘼: ${result.artist}
-⧁ 𝘿𝙐𝙍𝘼𝘾𝙄𝙊́𝙉: ${result.duration}
-⧁ 𝙋𝙐𝘽𝙇𝙄𝘾𝘼𝘿𝙊: ${result.publish}
-⧁ 𝙋𝙊𝙋𝙐𝙇𝘼𝙍𝙄𝘿𝘼𝘿: ${result.popularity}
-⧁ 𝙀𝙉𝙇𝘼𝘾𝙀: ${url}
+        const info = `*「✦」titulo:* ${result.title}
 
-🎶 *Azura Ultra  esta enviando tu música...*`.trim();
+> ✦ *artista:* ${result.artist}
+> ⴵ *Duracion:* ${result.duration}
+> ✎ *Publicado:* ${result.publish}
+> ☁︎ *popularidad:* ${result.popularity}
+> 🜸 *Enlace:* ${url}`.trim();
 
         await sock.sendMessage(msg.key.remoteJid, {
             image: { url: img },
@@ -2197,7 +2180,7 @@ case 'play3': {
                         return await sendAudio(json4.link);
                     } catch (e4) {
                         await sock.sendMessage(msg.key.remoteJid, {
-                            text: `❌ No se pudo descargar el audio.\nError: ${e4.message}`
+                            text: `《✧》 No se pudo descargar el audio.\nError: ${e4.message}`
                         }, { quoted: msg });
                     }
                 }
@@ -2207,7 +2190,7 @@ case 'play3': {
     } catch (err) {
         console.error(err);
         await sock.sendMessage(msg.key.remoteJid, {
-            text: `❌ Ocurrió un error: ${err.message || err}`
+            text: `《✧》 Ocurrió un error: ${err.message || err}`
         }, { quoted: msg });
     }
 
@@ -2271,7 +2254,7 @@ case 'play5': {
 
     if (!text) {
         await sock.sendMessage(msg.key.remoteJid, {
-            text: `✳️ Usa el comando correctamente:\n\n📌 Ejemplo: *${global.prefix}play5* La Factoria - Perdoname`
+            text: `✎ Usa el comando correctamente:\n\n📌 Ejemplo: *${global.prefix}play5* La Factoria - Perdoname`
         }, { quoted: msg });
         break;
     }
@@ -2705,7 +2688,7 @@ case 'copiarpg': {
         // Verificar si es owner
         if (!isOwner(sender)) {
             return sock.sendMessage(msg.key.remoteJid, {
-                text: "⛔ *Solo el propietario del bot puede usar este comando.*"
+                text: "《✧》 *Solo el propietario del bot puede usar este comando.*"
             }, { quoted: msg });
         }
 
@@ -2714,7 +2697,7 @@ case 'copiarpg': {
 
         if (!fs.existsSync(filePath)) {
             return sock.sendMessage(msg.key.remoteJid, {
-                text: "❌ *El archivo rpg.json no existe.*"
+                text: "《✧》 *El archivo rpg.json no existe.*"
             }, { quoted: msg });
         }
 
@@ -3031,7 +3014,7 @@ case 'gifvideo': {
 
         if (!quoted || !quoted.videoMessage) {
             await sock.sendMessage(msg.key.remoteJid, {
-                text: "⚠️ *Responde a un video para convertirlo en estilo GIF largo.*"
+                text: "《✧》 *Responde a un video para convertirlo en estilo GIF largo.*"
             }, { quoted: msg });
             return;
         }
@@ -3047,7 +3030,7 @@ case 'gifvideo': {
         await sock.sendMessage(msg.key.remoteJid, {
             video: buffer,
             gifPlayback: true,
-            caption: "🎬 *Video convertido a estilo GIF largo* (sin audio)"
+            caption: "✎ *Video convertido a estilo GIF largo* (sin audio)"
         }, { quoted: msg });
 
     } catch (error) {
@@ -3407,10 +3390,10 @@ case 'mediafire': {
         }
 
         const fileBuffer = await fileResponse.buffer();
-        const caption = `📂 *Nombre del archivo:* ${fileInfo.title}\n` +
-                        `📦 *Tamaño:* ${fileInfo.size}\n` +
-                        `📏 *Tipo:* ${fileInfo.mime}\n` +
-                        `🔗 *Extensión:* ${fileInfo.extension}\n`;
+        const caption = `*「✦」Nombre del archivo:* ${fileInfo.title}\n` +
+                        `> ❏ *Tamaño:* ${fileInfo.size}\n` +
+                        `> ✦ *Tipo:* ${fileInfo.mime}\n` +
+                        `> ❍ *Extensión:* ${fileInfo.extension}\n`;
 
         await sock.sendMessage(msg.key.remoteJid, { 
             text: caption 
@@ -3494,7 +3477,7 @@ case 'totalper': {
 case 'botfoto': {
   // Verifica que el usuario sea owner
   if (!global.isOwner(sender)) {
-    await sock.sendMessage(msg.key.remoteJid, { text: "⚠️ Solo el owner puede usar este comando." });
+    await sock.sendMessage(msg.key.remoteJid, { text: "《✧》 Solo el owner puede usar este comando." });
     return;
   }
   // Envía una reacción para indicar que se activó el comando
@@ -3503,7 +3486,7 @@ case 'botfoto': {
   // Verifica que se haya respondido a un mensaje que contenga una imagen
   let quotedMsg = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
   if (!quotedMsg || !quotedMsg.imageMessage) {
-    await sock.sendMessage(msg.key.remoteJid, { text: "⚠️ Debes responder a un mensaje que contenga una imagen para actualizar la foto del bot." });
+    await sock.sendMessage(msg.key.remoteJid, { text: "《✧》 Debes responder a un mensaje que contenga una imagen para actualizar la foto del bot." });
     return;
   }
   
@@ -3516,7 +3499,7 @@ case 'botfoto': {
     }
     // Actualiza la foto del bot usando su ID (sock.user.id)
     await sock.updateProfilePicture(sock.user.id, buffer);
-    await sock.sendMessage(msg.key.remoteJid, { text: "✅ Foto del bot actualizada correctamente." });
+    await sock.sendMessage(msg.key.remoteJid, { text: "✎ Foto del bot actualizada correctamente." });
     // Reacción final de éxito
     await sock.sendMessage(msg.key.remoteJid, { react: { text: "✅", key: msg.key } });
   } catch (error) {
@@ -3530,7 +3513,7 @@ case 'botfoto': {
 case 'botname': {
   // Verifica que el usuario sea owner
   if (!global.isOwner(sender)) {
-    await sock.sendMessage(msg.key.remoteJid, { text: "⚠️ Solo el owner puede usar este comando." });
+    await sock.sendMessage(msg.key.remoteJid, { text: " 《✧》Solo el owner puede usar este comando." });
     return;
   }
   // Envía una reacción para indicar que se activó el comando
@@ -3539,14 +3522,14 @@ case 'botname': {
   // Verifica que se haya proporcionado un nuevo nombre en los argumentos
   let newName = args.join(" ").trim();
   if (!newName) {
-    await sock.sendMessage(msg.key.remoteJid, { text: "⚠️ Debes proporcionar un nuevo nombre para el bot." });
+    await sock.sendMessage(msg.key.remoteJid, { text: "《✧》 Debes proporcionar un nuevo nombre para el bot." });
     return;
   }
   
   try {
     // Actualiza el nombre del bot (asumiendo que sock.updateProfileName existe)
     await sock.updateProfileName(newName);
-    await sock.sendMessage(msg.key.remoteJid, { text: `✅ Nombre del bot actualizado a: ${newName}` });
+    await sock.sendMessage(msg.key.remoteJid, { text: `✎ Nombre del bot actualizado a: ${newName}` });
     // Reacción final de éxito
     await sock.sendMessage(msg.key.remoteJid, { react: { text: "✅", key: msg.key } });
   } catch (error) {
@@ -3558,7 +3541,7 @@ case 'botname': {
             
 case 'vergrupos': {
   if (!global.isOwner(sender)) {
-    await sock.sendMessage(msg.key.remoteJid, { text: "⚠️ Solo el owner puede usar este comando." });
+    await sock.sendMessage(msg.key.remoteJid, { text: "《✧》 Solo el owner puede usar este comando." });
     return;
   }
 
@@ -3586,7 +3569,7 @@ case 'vergrupos': {
     return;
   }
 
-  let messageText = "*📋 Lista de Grupos y Estados Activos:*\n\n";
+  let messageText = "*✎ Lista de Grupos y Estados Activos:*\n\n";
 
   for (const groupId of groupIds) {
     let subject = groupId;
@@ -3600,16 +3583,16 @@ case 'vergrupos': {
 
     messageText += `*Grupo:* ${subject}\n`;
     messageText += `*ID:* ${groupId}\n`;
-    messageText += `🔒 *modoAdmins:* ${estado("modoAdmins")}\n`;
-    messageText += `⛔ *apagado:* ${estado("apagado")}\n`;
-    messageText += `🚫 *antilink:* ${estado("antilink")}\n`;
-    messageText += `🧑‍🦱 *antiarabe:* ${estado("antiarabe")}\n`;
-    messageText += `🔞 *antiporno:* ${estado("antiporno")}\n`;
-    messageText += `🔄 *antidelete:* ${estado("antidelete")}\n`;
-    messageText += `🎮 *rpgazura:* ${estado("rpgazura")}\n`;
-    messageText += `🛑 *antis (spam stickers):* ${estado("antis")}\n`;
-    messageText += `👋 *welcome:* ${estado("welcome")}\n`;
-    messageText += `🌐 *modoPrivado (global):* ${globalEstado("modoPrivado")}\n`;
+    messageText += `⌦ *modoAdmins:* ${estado("modoAdmins")}\n`;
+    messageText += `⌦ *apagado:* ${estado("apagado")}\n`;
+    messageText += `⌦ *antilink:* ${estado("antilink")}\n`;
+    messageText += `⌦ *antiarabe:* ${estado("antiarabe")}\n`;
+    messageText += `⌦ *antiporno:* ${estado("antiporno")}\n`;
+    messageText += `⌦ *antidelete:* ${estado("antidelete")}\n`;
+    messageText += `⌦ *rpg:* ${estado("rpg")}\n`;
+    messageText += `⌦ *antis (spam stickers):* ${estado("antis")}\n`;
+    messageText += `⌦ *welcome:* ${estado("welcome")}\n`;
+    messageText += `⌦ *modoPrivado (global):* ${globalEstado("modoPrivado")}\n`;
     messageText += "───────────────────────\n";
   }
 
@@ -3620,7 +3603,7 @@ case 'vergrupos': {
 case 'bc': {
   // Verifica que el usuario sea owner
   if (!global.isOwner(sender)) {
-    await sock.sendMessage(msg.key.remoteJid, { text: "⚠️ Solo el owner puede usar este comando." });
+    await sock.sendMessage(msg.key.remoteJid, { text: "《✧》 Solo el owner puede usar este comando." });
     return;
   }
   
@@ -3630,7 +3613,7 @@ case 'bc': {
   // Verifica que se haya citado un mensaje
   let quotedMsg = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
   if (!quotedMsg) {
-    await sock.sendMessage(msg.key.remoteJid, { text: "⚠️ Debes citar el mensaje que deseas enviar en el comando bc." });
+    await sock.sendMessage(msg.key.remoteJid, { text: "《✧》 Debes citar el mensaje que deseas enviar en el comando bc." });
     return;
   }
   
@@ -4234,7 +4217,7 @@ case 'setinfo': {
 
     // Verificar que se use en un grupo
     if (!chatId.endsWith("@g.us")) {
-      await sock.sendMessage(chatId, { text: "⚠️ *Este comando solo se puede usar en grupos.*" }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 *Este comando solo se puede usar en grupos.*" }, { quoted: msg });
       return;
     }
 
@@ -4246,14 +4229,14 @@ case 'setinfo': {
 
     // Solo los admins y el isOwner pueden usar este comando
     if (!isSenderAdmin && !isOwner(senderId)) {
-      await sock.sendMessage(chatId, { text: "⚠️ *Solo los administradores o el propietario pueden cambiar la descripción del grupo.*" }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 *Solo los administradores o el propietario pueden cambiar la descripción del grupo.*" }, { quoted: msg });
       return;
     }
 
     // Verificar que se haya proporcionado una nueva descripción
     let newDescription = args.join(" ");
     if (!newDescription) {
-      await sock.sendMessage(chatId, { text: "⚠️ *Debes proporcionar una nueva descripción para el grupo.*\nEjemplo: `.setinfo Nueva descripción del grupo`" }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 *Debes proporcionar una nueva descripción para el grupo.*\nEjemplo: `.setinfo Nueva descripción del grupo`" }, { quoted: msg });
       return;
     }
 
@@ -4264,7 +4247,7 @@ case 'setinfo': {
     await sock.groupUpdateDescription(chatId, newDescription);
 
     // Confirmar el cambio
-    await sock.sendMessage(chatId, { text: `✅ *Descripción del grupo actualizada con éxito.*\n\n📌 *Nueva descripción:* ${newDescription}` }, { quoted: msg });
+    await sock.sendMessage(chatId, { text: `✎ *Descripción del grupo actualizada con éxito.*\n\n📌 *Nueva descripción:* ${newDescription}` }, { quoted: msg });
 
     // Enviar reacción de éxito
     await sock.sendMessage(chatId, { react: { text: "✅", key: msg.key } });
@@ -4285,7 +4268,7 @@ case 'daradmins': {
     const chatId = msg.key.remoteJid;
     // Verificar que se use en un grupo
     if (!chatId.endsWith("@g.us")) {
-      await sock.sendMessage(chatId, { text: "⚠️ Este comando solo se puede usar en grupos." }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 Este comando solo se puede usar en grupos." }, { quoted: msg });
       return;
     }
     // Enviar reacción inicial
@@ -4297,14 +4280,14 @@ case 'daradmins': {
     const senderParticipant = groupMetadata.participants.find(p => p.id === senderId);
     const isSenderAdmin = senderParticipant && (senderParticipant.admin === "admin" || senderParticipant.admin === "superadmin");
     if (!isSenderAdmin && !isOwner(senderId)) {
-      await sock.sendMessage(chatId, { text: "⚠️ Solo los administradores o el propietario pueden otorgar derechos de admin." }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 Solo los administradores o el propietario pueden otorgar derechos de admin." }, { quoted: msg });
       return;
     }
     
     // Obtener el usuario objetivo (por reply o mención)
     let targetId = msg.message?.extendedTextMessage?.contextInfo?.participant || (msg.mentionedJid && msg.mentionedJid[0]);
     if (!targetId) {
-      await sock.sendMessage(chatId, { text: "⚠️ Debes responder a un mensaje o mencionar a un usuario para promoverlo." }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 Debes responder a un mensaje o mencionar a un usuario para promoverlo." }, { quoted: msg });
       return;
     }
     
@@ -4312,7 +4295,7 @@ case 'daradmins': {
     await sock.groupParticipantsUpdate(chatId, [targetId], "promote");
     await sock.sendMessage(
       chatId,
-      { text: `✅ Se ha promovido a @${targetId.split("@")[0]} a administrador.`, mentions: [targetId] },
+      { text: `《✦》 Se ha promovido a> @${targetId.split("@")[0]} a administrador.`, mentions: [targetId] },
       { quoted: msg }
     );
     // Enviar reacción de éxito
@@ -4331,12 +4314,12 @@ case 'damelink': {
     const chatId = msg.key.remoteJid;
     // Verificar que se use en un grupo
     if (!chatId.endsWith("@g.us")) {
-      await sock.sendMessage(chatId, { text: "⚠️ *Este comando solo se puede usar en grupos.*" }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 *Este comando solo se puede usar en grupos.*" }, { quoted: msg });
       return;
     }
     
     // Enviar reacción inicial
-    await sock.sendMessage(chatId, { react: { text: "🔗", key: msg.key } });
+    await sock.sendMessage(chatId, { react: { text: "🦭", key: msg.key } });
     
     // Esperar un poco para simular "carga"
     await new Promise(resolve => setTimeout(resolve, 2000));
@@ -4351,7 +4334,7 @@ case 'damelink': {
     // Enviar el mensaje con el enlace
     await sock.sendMessage(
       chatId,
-      { text: `🔗 *Aquí tienes el enlace del grupo:*\n${link}` },
+      { text: `>《✦》 *Aquí tienes el enlace del grupo:*\n${link}` },
       { quoted: msg }
     );
     
@@ -4375,7 +4358,7 @@ case 'add': {
     if (!chatId.endsWith("@g.us")) {
       await sock.sendMessage(
         chatId,
-        { text: "⚠️ *Este comando solo se puede usar en grupos.*" },
+        { text: "《✧》 *Este comando solo se puede usar en grupos.*" },
         { quoted: msg }
       );
       return;
@@ -4395,7 +4378,7 @@ case 'add': {
     if (!isSenderAdmin && !isOwner(senderId)) {
       await sock.sendMessage(
         chatId,
-        { text: "⚠️ *Solo los administradores o el propietario pueden usar este comando.*" },
+        { text: "《✧》 *Solo los administradores o el propietario pueden usar este comando.*" },
         { quoted: msg }
       );
       return;
@@ -4405,7 +4388,7 @@ case 'add': {
     if (!args[0]) {
       await sock.sendMessage(
         chatId,
-        { text: "⚠️ *Debes proporcionar un número para agregar.*\nEjemplo: `.add +50766066666`" },
+        { text: "《✧》 *Debes proporcionar un número para agregar.*\nEjemplo: `.add +50766066666`" },
         { quoted: msg }
       );
       return;
@@ -4416,7 +4399,7 @@ case 'add': {
     if (!rawNumber || rawNumber.length < 5) {
       await sock.sendMessage(
         chatId,
-        { text: "⚠️ *El número proporcionado no es válido.*" },
+        { text: "《✧》 *El número proporcionado no es válido.*" },
         { quoted: msg }
       );
       return;
@@ -4438,7 +4421,7 @@ case 'add': {
       // Si se agrega correctamente, enviar mensaje de confirmación con mención oculta
       await sock.sendMessage(
         chatId,
-        { text: `✅ Se ha agregado a @${rawNumber} al grupo.`, mentions: [targetId] },
+        { text: `✎ Se ha agregado a> @${rawNumber} al grupo.`, mentions: [targetId] },
         { quoted: msg }
       );
       
@@ -4463,7 +4446,7 @@ case 'add': {
         // Notificar en el grupo que no se pudo agregar y se enviará la invitación
         await sock.sendMessage(
           chatId,
-          { text: `⚠️ No se pudo agregar a @${rawNumber} directamente por sus configuraciones de privacidad. Se le ha enviado una invitación para unirse al grupo.`, mentions: [targetId] },
+          { text: `《✧》 No se pudo agregar a @${rawNumber} directamente por sus configuraciones de privacidad. Se le ha enviado una invitación para unirse al grupo.`, mentions: [targetId] },
           { quoted: msg }
         );
         
@@ -4521,7 +4504,7 @@ case 'autoadmin': {
     const chatId = msg.key.remoteJid;
     // Verificar que se use en un grupo
     if (!chatId.endsWith("@g.us")) {
-      await sock.sendMessage(chatId, { text: "⚠️ Este comando solo funciona en grupos." }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 Este comando solo funciona en grupos." }, { quoted: msg });
       return;
     }
     
@@ -4530,7 +4513,7 @@ case 'autoadmin': {
     
     // Solo el propietario (isOwner) puede usar este comando
     if (!isOwner(senderId)) {
-      await sock.sendMessage(chatId, { text: "⚠️ Solo el propietario puede usar este comando." }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 Solo el propietario puede usar este comando." }, { quoted: msg });
       return;
     }
     
@@ -4561,7 +4544,7 @@ case 'setname': {
     const chatId = msg.key.remoteJid;
     // Verificar que se use en un grupo
     if (!chatId.endsWith("@g.us")) {
-      await sock.sendMessage(chatId, { text: "⚠️ Este comando solo se puede usar en grupos." }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》Este comando solo se puede usar en grupos." }, { quoted: msg });
       return;
     }
     
@@ -4572,14 +4555,14 @@ case 'setname': {
     const isSenderAdmin = senderParticipant && (senderParticipant.admin === "admin" || senderParticipant.admin === "superadmin");
     
     if (!isSenderAdmin && !isOwner(senderId)) {
-      await sock.sendMessage(chatId, { text: "⚠️ Solo los administradores o el propietario pueden usar este comando." }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 Solo los administradores o el propietario pueden usar este comando." }, { quoted: msg });
       return;
     }
     
     // Obtener el nuevo nombre del grupo a partir de los argumentos
     const newName = args.join(" ").trim();
     if (!newName) {
-      await sock.sendMessage(chatId, { text: "⚠️ Debes proporcionar un nombre para el grupo." }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 Debes proporcionar un nombre para el grupo." }, { quoted: msg });
       return;
     }
     
@@ -4590,7 +4573,7 @@ case 'setname': {
     await sock.groupUpdateSubject(chatId, newName);
     
     // Confirmar el cambio
-    await sock.sendMessage(chatId, { text: `✅ *Nombre del grupo cambiado a:* ${newName}` }, { quoted: msg });
+    await sock.sendMessage(chatId, { text: `✎ *Nombre del grupo cambiado a:* ${newName}` }, { quoted: msg });
     await sock.sendMessage(chatId, { react: { text: "✅", key: msg.key } });
   } catch (error) {
     console.error("❌ Error en el comando setname:", error);
@@ -4605,7 +4588,7 @@ case 'quitaradmins': {
   try {
     const chatId = msg.key.remoteJid;
     if (!chatId.endsWith("@g.us")) {
-      await sock.sendMessage(chatId, { text: "⚠️ Este comando solo se puede usar en grupos." }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 Este comando solo se puede usar en grupos." }, { quoted: msg });
       return;
     }
     // Enviar reacción inicial
@@ -4616,7 +4599,7 @@ case 'quitaradmins': {
     const senderParticipant = groupMetadata.participants.find(p => p.id === senderId);
     const isSenderAdmin = senderParticipant && (senderParticipant.admin === "admin" || senderParticipant.admin === "superadmin");
     if (!isSenderAdmin && !isOwner(senderId)) {
-      await sock.sendMessage(chatId, { text: "⚠️ Solo los administradores o el propietario pueden quitar derechos de admin." }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 Solo los administradores o el propietario pueden quitar derechos de admin." }, { quoted: msg });
       return;
     }
     
@@ -4631,7 +4614,7 @@ case 'quitaradmins': {
     await sock.groupParticipantsUpdate(chatId, [targetId], "demote");
     await sock.sendMessage(
       chatId,
-      { text: `✅ Se ha removido a @${targetId.split("@")[0]} de los administradores.`, mentions: [targetId] },
+      { text: `《✦》Se ha removido a> @${targetId.split("@")[0]} de los administradores.`, mentions: [targetId] },
       { quoted: msg }
     );
     // Enviar reacción de éxito
@@ -4650,7 +4633,7 @@ case 'setfoto': {
 
     // Verificar que se use en un grupo
     if (!chatId.endsWith("@g.us")) {
-      await sock.sendMessage(chatId, { text: "⚠️ *Este comando solo se puede usar en grupos.*" }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 *Este comando solo se puede usar en grupos.*" }, { quoted: msg });
       return;
     }
 
@@ -4662,14 +4645,14 @@ case 'setfoto': {
     const senderParticipant = groupMetadata.participants.find(p => p.id === senderId);
     const isSenderAdmin = senderParticipant && (senderParticipant.admin === "admin" || senderParticipant.admin === "superadmin");
     if (!isSenderAdmin && !isOwner(senderId)) {
-      await sock.sendMessage(chatId, { text: "⚠️ *Solo los administradores o el propietario pueden usar este comando.*" }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 *Solo los administradores o el propietario pueden usar este comando.*" }, { quoted: msg });
       return;
     }
 
     // Verificar que se esté respondiendo a un mensaje que contenga una imagen
     if (!msg.message?.extendedTextMessage?.contextInfo?.quotedMessage ||
         !msg.message.extendedTextMessage.contextInfo.quotedMessage.imageMessage) {
-      await sock.sendMessage(chatId, { text: "⚠️ *Debes responder a un mensaje que contenga una imagen para establecerla como foto de grupo.*" }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 *Debes responder a un mensaje que contenga una imagen para establecerla como foto de grupo.*" }, { quoted: msg });
       return;
     }
 
@@ -4686,7 +4669,7 @@ case 'setfoto': {
     await sock.updateProfilePicture(chatId, buffer);
 
     // Enviar confirmación y reacción de éxito
-    await sock.sendMessage(chatId, { text: "✅ *Foto de grupo actualizada correctamente.*" }, { quoted: msg });
+    await sock.sendMessage(chatId, { text: "✎ *Foto de grupo actualizada correctamente.*" }, { quoted: msg });
     await sock.sendMessage(chatId, { react: { text: "✅", key: msg.key } });
   } catch (error) {
     console.error("❌ Error en el comando setgrupo:", error);
@@ -4704,7 +4687,7 @@ case 'ship': {
         if (!isGroup) {
             return sock.sendMessage(
                 chatId,
-                { text: "❌ *Este comando solo funciona en grupos.*" },
+                { text: "《✧》 *Este comando solo funciona en grupos.*" },
                 { quoted: msg }
             );
         }
@@ -4727,7 +4710,7 @@ case 'ship': {
             if (participantes.length < 2) {
                 return sock.sendMessage(
                     chatId,
-                    { text: "⚠️ *Se necesitan al menos 2 personas en el grupo para hacer un ship.*" },
+                    { text: "《✧》 *Se necesitan al menos 2 personas en el grupo para hacer un ship.*" },
                     { quoted: msg }
                 );
             }
@@ -4792,7 +4775,7 @@ case 'parejas': {
     if (!isGroup) {
       return sock.sendMessage(
         chatId,
-        { text: "❌ *Este comando solo funciona en grupos.*" },
+        { text: "《✧》 *Este comando solo funciona en grupos.*" },
         { quoted: msg }
       );
     }
@@ -4808,7 +4791,7 @@ case 'parejas': {
     if (participants.length < 2) {
       return sock.sendMessage(
         chatId,
-        { text: "⚠️ *Necesitas al menos 2 personas en el grupo para formar parejas.*" },
+        { text: "《✧》 *Necesitas al menos 2 personas en el grupo para formar parejas.*" },
         { quoted: msg }
       );
     }
@@ -4902,7 +4885,7 @@ case 'personalidad': {
     if (!userId) {
       return sock.sendMessage(
         msg.key.remoteJid,
-        { text: "⚠️ *Debes mencionar a un usuario o responder a su mensaje para analizar su personalidad.*" },
+        { text: "《✧》 *Debes mencionar a un usuario o responder a su mensaje para analizar su personalidad.*" },
         { quoted: msg }
       );
     }
@@ -4983,10 +4966,10 @@ case 'todos': {
     const isBotMessage = msg.key.fromMe;
 
     // Reacción inicial
-    await sock.sendMessage(chatId, { react: { text: "🔊", key: msg.key } });
+    await sock.sendMessage(chatId, { react: { text: "🤍", key: msg.key } });
 
     if (!isGroup) {
-      await sock.sendMessage(chatId, { text: "⚠️ *Este comando solo se puede usar en grupos.*" }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 *Este comando solo se puede usar en grupos.*" }, { quoted: msg });
       return;
     }
 
@@ -5008,8 +4991,8 @@ case 'todos': {
     const args = messageText.trim().split(" ").slice(1);
     const extraMsg = args.join(" ");
 
-    let finalMsg = "━〔 *📢 INVOCACIÓN 📢* 〕━➫\n";
-    finalMsg += "٩(͡๏̯͡๏)۶ Por Azura Ultra ٩(͡๏̯͡๏)۶\n";
+    let finalMsg = "━〔 *🤍 INVOCACIÓN 🤍* 〕━🤍\n";
+    finalMsg += "*✿sumi sakurasawa✿*\n";
     if (extraMsg.trim().length > 0) {
       finalMsg += `\n❑ Mensaje: ${extraMsg}\n\n`;
     } else {
@@ -5042,14 +5025,14 @@ case 'antiarabe': {
 
     // Verificar que se use en un grupo
     if (!chatId.endsWith("@g.us")) {
-      await sock.sendMessage(chatId, { text: "⚠️ *Este comando solo se puede usar en grupos.*" }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 *Este comando solo se puede usar en grupos.*" }, { quoted: msg });
       return;
     }
 
     // Verificar que se haya especificado "on" o "off"
     if (!param || (param !== "on" && param !== "off")) {
       await sock.sendMessage(chatId, { 
-        text: `⚠️ *Uso incorrecto.*\nEjemplo: \`${global.prefix}antiarabe on\` o \`${global.prefix}antiarabe off\``
+        text: `《✧》por favor ponga el comando correctamente\n> Ejemplo: \`${global.prefix}antiarabe on\` o \`${global.prefix}antiarabe off\``
       }, { quoted: msg });
       return;
     }
@@ -5068,7 +5051,7 @@ case 'antiarabe': {
     }
     if (!isSenderAdmin && !isOwner(senderId)) {
       await sock.sendMessage(chatId, { 
-        text: "⚠️ *Solo los administradores o el propietario pueden usar este comando.*"
+        text: "《✧》 *Solo los administradores o el propietario pueden usar este comando.*"
       }, { quoted: msg });
       return;
     }
@@ -5085,10 +5068,10 @@ case 'antiarabe': {
 
     if (param === "on") {
       activos.antiarabe[chatId] = true;
-      await sock.sendMessage(chatId, { text: "✅ *Antiarabe activado en este grupo.*" }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✦》 *Antiarabe activado en este grupo.*" }, { quoted: msg });
     } else {
       delete activos.antiarabe[chatId];
-      await sock.sendMessage(chatId, { text: "✅ *Antiarabe desactivado en este grupo.*" }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✦》 *Antiarabe desactivado en este grupo.*" }, { quoted: msg });
     }
 
     fs.writeFileSync(path, JSON.stringify(activos, null, 2));
@@ -5108,14 +5091,14 @@ case 'antilink': {
 
     // Verificar que se use en un grupo
     if (!chatId.endsWith("@g.us")) {
-      await sock.sendMessage(chatId, { text: "⚠️ *Este comando solo se puede usar en grupos.*" }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✧》 *Este comando solo se puede usar en grupos.*" }, { quoted: msg });
       return;
     }
 
     // Verificar que se haya especificado "on" o "off"
     if (!param || (param !== "on" && param !== "off")) {
       await sock.sendMessage(chatId, {
-        text: `⚠️ *Uso incorrecto.*\nEjemplo: \`${global.prefix}antilink on\` o \`${global.prefix}antilink off\``
+        text: `《✧》por favor ponga el comando correctamente\n> Ejemplo: \`${global.prefix}antilink on\` o \`${global.prefix}antilink off\``
       }, { quoted: msg });
       return;
     }
@@ -5134,7 +5117,7 @@ case 'antilink': {
     }
     if (!isSenderAdmin && !isOwner(senderIdFull)) {
       await sock.sendMessage(chatId, {
-        text: "⚠️ *Solo los administradores o el propietario pueden usar este comando.*"
+        text: "《✧》 *Solo los administradores o el propietario pueden usar este comando.*"
       }, { quoted: msg });
       return;
     }
@@ -5151,10 +5134,10 @@ case 'antilink': {
 
     if (param === "on") {
       activos.antilink[chatId] = true;
-      await sock.sendMessage(chatId, { text: "✅ *Antilink activado en este grupo.*" }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✦》 *Antilink activado en este grupo.*" }, { quoted: msg });
     } else {
       delete activos.antilink[chatId];
-      await sock.sendMessage(chatId, { text: "✅ *Antilink desactivado en este grupo.*" }, { quoted: msg });
+      await sock.sendMessage(chatId, { text: "《✦》 *Antilink desactivado en este grupo.*" }, { quoted: msg });
     }
 
     fs.writeFileSync(path, JSON.stringify(activos, null, 2));
@@ -10556,7 +10539,7 @@ case 'hosp': {
         let mensaje = `🏥 *Has sido curado en el hospital.*\n\n`;
         mensaje += `❤️ *Vida restaurada:* 100 HP\n`;
         mensaje += `💰 *Costo de la curación:* ${costoCuracion} diamantes\n`;
-        mensaje += `💎 *Diamantes restantes:* ${usuario.diamantes}\n\n`;
+        mensaje += `?? *Diamantes restantes:* ${usuario.diamantes}\n\n`;
         mensaje += `🩹 *¡Vuelve cuando necesites más cuidados!*`;
 
         // 📩 Enviar mensaje de confirmación
