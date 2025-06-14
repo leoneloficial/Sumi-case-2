@@ -27,7 +27,10 @@ const handler = async (msg, { conn, args }) => {
 
   if (!args[0] || !["on", "off"].includes(args[0].toLowerCase())) {
     return conn.sendMessage(chatId, {
-      text: "⚙️ Usa: *antis on/off* para activar o desactivar el sistema."
+      text: "「✦」Un administrador puede activar o desactivar este comando utilizando
+
+> ✎ antis no
+> ✎ antis off"
     }, { quoted: msg });
   }
 
@@ -42,12 +45,12 @@ const handler = async (msg, { conn, args }) => {
   if (args[0].toLowerCase() === "on") {
     activos.antis[chatId] = true;
     await conn.sendMessage(chatId, {
-      text: "✅ *Sistema Antis activado* en este grupo."
+      text: "《✦》 *Sistema Antis activado* en este grupo."
     }, { quoted: msg });
   } else {
     delete activos.antis[chatId];
     await conn.sendMessage(chatId, {
-      text: "🛑 *Sistema Antis desactivado* en este grupo."
+      text: "《✦》 *Sistema Antis desactivado* en este grupo."
     }, { quoted: msg });
   }
 
