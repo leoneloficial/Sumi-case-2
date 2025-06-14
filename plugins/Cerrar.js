@@ -9,7 +9,7 @@ const handler = async (msg, { conn, args }) => {
 
   if (!isGroup) {
     await conn.sendMessage(chatId, {
-      text: "❌ Este comando solo puede usarse en grupos."
+      text: "《✧》 Este comando solo puede usarse en grupos."
     }, { quoted: msg });
     return;
   }
@@ -22,7 +22,7 @@ const handler = async (msg, { conn, args }) => {
 
   if (!isAdmin && !isOwner && !isFromMe) {
     await conn.sendMessage(chatId, {
-      text: "🚫 Solo los administradores del grupo o el owner pueden usar este comando."
+      text: "《✧》 Solo los administradores del grupo o el owner pueden usar este comando."
     }, { quoted: msg });
     return;
   }
@@ -69,7 +69,7 @@ const handler = async (msg, { conn, args }) => {
   fs.writeFileSync(tiempoPath, JSON.stringify(tiempoData, null, 2));
 
   await conn.sendMessage(chatId, {
-    text: `⏳ Grupo programado para cerrarse automáticamente en *${amount}${unit}*.`
+    text: `《✦》 Grupo programado para cerrarse automáticamente en> *${amount}${unit}*.`
   }, { quoted: msg });
 
   await conn.sendMessage(chatId, {
