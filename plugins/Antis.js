@@ -21,13 +21,13 @@ const handler = async (msg, { conn, args }) => {
 
   if (!isAdmin && !isOwner && !isFromMe) {
     return conn.sendMessage(chatId, {
-      text: "🚫 Solo los administradores del grupo, el owner o el bot pueden usar este comando."
+      text: "《✧》 Solo los administradores del grupo pueden usar este comando."
     }, { quoted: msg });
   }
 
   if (!args[0] || !["on", "off"].includes(args[0].toLowerCase())) {
     return conn.sendMessage(chatId, {
-      text: "「✦」Un administrador puede activar o desactivar este comando utilizando
+      text: "*「✦」Un administrador puede activar o desactivar este comando utilizando.*
 
 > ✎ antis no
 > ✎ antis off"
