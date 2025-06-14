@@ -9,7 +9,7 @@ const handler = async (msg, { conn, args }) => {
 
   if (!isGroup) {
     return conn.sendMessage(chatId, {
-      text: "❌ Este comando solo puede usarse en grupos."
+      text: "《✧》 Este comando solo puede usarse en grupos."
     }, { quoted: msg });
   }
 
