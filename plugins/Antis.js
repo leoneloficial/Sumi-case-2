@@ -27,7 +27,7 @@ const handler = async (msg, { conn, args }) => {
 
   if (!args[0] || !["on", "off"].includes(args[0].toLowerCase())) {
     return conn.sendMessage(chatId, {
-      text: "*「✦」Un administrador puede activar o desactivar este comando utilizando.*/n
+      text: "*「✦」Un administrador puede activar o desactivar este comando utilizando.
 > ✎ antis no
 > ✎ antis off"
     }, { quoted: msg });
